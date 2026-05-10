@@ -1,870 +1,1986 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>Neoflam Uzbekistan — Analytics</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Neoflam UZ — Sales Intelligence</title>
+<meta name="description" content="Внутренний дашборд аналитики Neoflam Uzbekistan" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23E8593F'/%3E%3Ctext x='50' y='70' text-anchor='middle' font-family='Georgia' font-size='62' fill='white' font-weight='600'%3EN%3C/text%3E%3C/svg%3E">
 <style>
+*{box-sizing:border-box;margin:0;padding:0}
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+/* =================================================
+   NEOFLAM BRAND COLORS
+   Inspired by Retro line: coral, terracotta, mint, cream
+   ================================================= */
+
+:root {
+  /* TYPOGRAPHY */
+  --f-head: 'DM Serif Display', Georgia, serif;
+  --f-body: 'DM Sans', system-ui, -apple-system, sans-serif;
+
+  /* GEOMETRY */
+  --r: 12px;
+  --r-lg: 18px;
+  --r-xl: 24px;
+
+  /* BRAND PRIMARY — Neoflam Coral (от линейки Retro) */
+  --coral: #E8593F;
+  --coral-d: #C8442C;
+  --coral-l: #F47B5E;
+  --coral-soft: rgba(232, 89, 63, .12);
+
+  /* BRAND SECONDARY — Mint (Fika line, Ecolon coating) */
+  --mint: #6FB89C;
+  --mint-d: #4A9579;
+  --mint-soft: rgba(111, 184, 156, .14);
+
+  /* BRAND TERTIARY — Soft Pink (Bebe — детская линейка) */
+  --rose: #E8A8B8;
+  --rose-d: #D17F94;
+  --rose-soft: rgba(232, 168, 184, .15);
+
+  /* SUPPORT */
+  --amber: #F2B544;
+  --amber-soft: rgba(242, 181, 68, .14);
+  --teal: #4A9C95;
+  --teal-soft: rgba(74, 156, 149, .14);
+
+  /* SEMANTIC */
+  --good: #5BA678;
+  --good-soft: rgba(91, 166, 120, .14);
+  --warn: #E89B45;
+  --warn-soft: rgba(232, 155, 69, .14);
+  --bad:  #D14F46;
+  --bad-soft:  rgba(209, 79, 70, .14);
 }
 
-:root{
+/* === DARK THEME === */
+:root[data-theme="dark"] {
+  --bg:    #14161A;
+  --bg2:   #1A1D22;
+  --bg3:   #20242B;
+  --card:  #1A1D22;
+  --card2: #20242B;
+  --border:  #262A32;
+  --border2: #323844;
+  --text:  #F4EFE6;     /* warm cream вместо чисто белого */
+  --text2: #A4ACB8;
+  --text3: #6A7280;
 
-  --bg:#F6F3EE;
-  --card:#FFFFFF;
-  --card-soft:#FAF7F2;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.2);
+  --shadow:    0 4px 16px rgba(0,0,0,.3);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,.4);
 
-  --border:#E9E2D8;
-
-  --text:#181818;
-  --text2:#5F5B57;
-  --muted:#908980;
-
-  --primary:#F05A4A;
-  --primary-dark:#DB4D3E;
-  --primary-soft:rgba(240,90,74,.10);
-
-  --green:#2E9B6F;
-  --amber:#D99127;
-  --red:#D64545;
-
-  --radius:20px;
-
+  --noise-opacity: 0.4;
+  --glow-opacity: 0.08;
 }
 
-html{
-  scroll-behavior:smooth;
+/* === LIGHT THEME (Cream / Ceramic) === */
+:root[data-theme="light"] {
+  --bg:    #FBF6EC;     /* кремовый, как керамика Neoflam */
+  --bg2:   #F4EBD8;
+  --bg3:   #EBDEC4;
+  --card:  #FFFFFF;
+  --card2: #FBF6EC;
+  --border:  #EAE0CC;
+  --border2: #DCCFB3;
+  --text:  #1F1A14;     /* тёплый чёрный, не #000 */
+  --text2: #5A5249;
+  --text3: #968B7B;
+
+  --shadow-sm: 0 1px 2px rgba(70, 50, 20, .04);
+  --shadow:    0 4px 16px rgba(70, 50, 20, .08);
+  --shadow-lg: 0 12px 40px rgba(70, 50, 20, .12);
+
+  --noise-opacity: 0;
+  --glow-opacity: 0.05;
 }
 
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'DM Sans',sans-serif;
-  overflow-x:hidden;
+html, body {
+  font-family: var(--f-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color .35s ease, color .35s ease;
 }
 
-.container{
-  width:min(1380px,92%);
-  margin:auto;
+a { color: inherit; text-decoration: none; }
+
+::selection { background: var(--coral); color: #FFF; }
+
+/* AMBIENT LAYERS */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--noise-opacity);
+  mix-blend-mode: overlay;
 }
 
-header{
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:rgba(255,255,255,.92);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--border);
+body::after {
+  content: '';
+  position: fixed;
+  top: -25vh; left: 25%;
+  width: 70vw; height: 70vh;
+  background: radial-gradient(ellipse at center, var(--coral) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--glow-opacity);
+  filter: blur(60px);
 }
 
-.nav{
-  height:76px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+/* ================ TOPBAR ================ */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  border-bottom: 1px solid var(--border);
+  transition: background-color .35s, border-color .35s;
 }
 
-.logo{
-  display:flex;
-  align-items:center;
-  gap:14px;
+.topbar-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 64px;
 }
 
-.logo-box{
-  width:46px;
-  height:46px;
-  border-radius:16px;
-  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-  font-weight:700;
-  font-size:18px;
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-logo {
+  width: 38px; height: 38px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--coral) 0%, var(--coral-d) 100%);
+  display: grid; place-items: center;
+  font-family: var(--f-head);
+  font-size: 19px;
+  font-weight: 600;
+  color: #FFF;
+  letter-spacing: -0.5px;
+  box-shadow: 0 4px 14px rgba(232, 89, 63, .35);
+}
+.brand-text { display: flex; flex-direction: column; line-height: 1.05; }
+.brand-name { font-family: var(--f-head); font-size: 19px; letter-spacing: -0.3px; }
+.brand-sub  { font-size: 10.5px; color: var(--text3); letter-spacing: 0.8px; text-transform: uppercase; margin-top: 2px; }
+
+.topnav { display: flex; gap: 2px; }
+.topnav a {
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+  border-radius: 8px;
+  transition: all .2s;
+}
+.topnav a:hover { background: var(--bg3); color: var(--text); }
+.topnav a.active { background: var(--coral-soft); color: var(--coral); }
+
+.topright { display: flex; align-items: center; gap: 12px; }
+
+.live-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 14px;
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  background: var(--card);
 }
 
-.logo-text h2{
-  font-size:20px;
+.live-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--mint);
+  box-shadow: 0 0 0 3px rgba(111, 184, 156, .25);
+  animation: pulse 2s infinite;
 }
 
-.logo-text p{
-  color:var(--muted);
-  font-size:13px;
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(111, 184, 156, .5); }
+  50% { box-shadow: 0 0 0 7px rgba(111, 184, 156, 0); }
 }
 
-.hero{
-  padding:46px 0 24px;
-  display:grid;
-  grid-template-columns:1.15fr .85fr;
-  gap:24px;
-  align-items:center;
+/* THEME TOGGLE */
+.theme-toggle {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: var(--card);
+  border: 1px solid var(--border2);
+  cursor: pointer;
+  display: grid; place-items: center;
+  color: var(--text2);
+  transition: all .2s;
+  position: relative;
+}
+.theme-toggle:hover { color: var(--coral); border-color: var(--coral); }
+.theme-toggle svg { width: 18px; height: 18px; transition: transform .35s; }
+.theme-toggle .icon-sun  { display: none; }
+.theme-toggle .icon-moon { display: block; }
+:root[data-theme="light"] .theme-toggle .icon-sun  { display: block; }
+:root[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+.theme-toggle:hover svg { transform: rotate(20deg); }
+
+/* CONTAINER */
+.wrap {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+  z-index: 1;
 }
 
-.hero h1{
-  font-size:58px;
-  line-height:.98;
-  font-family:'DM Serif Display',serif;
-  margin-bottom:18px;
+/* =============== HERO =============== */
+.hero {
+  padding: 80px 0 88px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 80px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
 }
 
-.hero h1 span{
-  color:var(--primary);
+.hero-eyebrow {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--coral);
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px; height: 1px;
+  background: var(--coral);
 }
 
-.hero p{
-  max-width:680px;
-  line-height:1.7;
-  color:var(--text2);
-  font-size:17px;
+.hero h1 {
+  font-family: var(--f-head);
+  font-size: 60px;
+  line-height: 1.05;
+  letter-spacing: -1.8px;
+  margin-bottom: 24px;
+}
+.hero h1 em { font-style: italic; color: var(--coral); }
+
+.hero-sub {
+  font-size: 16px;
+  color: var(--text2);
+  line-height: 1.65;
+  max-width: 540px;
 }
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:16px;
+.hero-stats { display: flex; flex-direction: column; gap: 12px; }
+
+.hero-stat {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 22px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all .3s ease;
+}
+.hero-stat:hover {
+  transform: translateX(4px);
+  border-color: var(--coral);
+  box-shadow: var(--shadow);
+}
+.hero-stat::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.hero-stat:nth-child(1)::before { background: var(--coral); }
+.hero-stat:nth-child(2)::before { background: var(--mint); }
+.hero-stat:nth-child(3)::before { background: var(--rose); }
+
+.hs-val {
+  font-family: var(--f-head);
+  font-size: 44px;
+  letter-spacing: -1.5px;
+  line-height: 1;
+}
+.hs-label {
+  font-size: 12.5px;
+  color: var(--text2);
+  margin-top: 6px;
 }
 
-.stat-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:28px;
-  box-shadow:
-    0 1px 2px rgba(0,0,0,.02),
-    0 10px 30px rgba(0,0,0,.04);
+/* =============== SECTION =============== */
+.section {
+  padding: 72px 0;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-of-type { border-bottom: none; }
+
+.section-head { margin-bottom: 40px; }
+.section-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--coral);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.section-head h2 {
+  font-family: var(--f-head);
+  font-size: 40px;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+.section-head p {
+  color: var(--text2);
+  font-size: 14.5px;
 }
 
-.stat-card h2{
-  font-size:46px;
-  margin-bottom:10px;
-  font-family:'DM Serif Display',serif;
+/* =============== KPI GRID =============== */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
 }
 
-.stat-card p{
-  color:var(--text2);
+.kpi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  transition: all .25s;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--coral);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .35s ease;
+}
+.kpi-card:hover {
+  border-color: var(--border2);
+  background: var(--card2);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+.kpi-card:hover::after { transform: scaleX(1); }
+
+.kpi-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 10px;
+}
+.kpi-label {
+  font-size: 12.5px;
+  color: var(--text2);
+  font-weight: 500;
+  line-height: 1.4;
+}
+.kpi-badge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.kpi-badge.down { background: var(--bad-soft); color: var(--bad); }
+.kpi-badge.up   { background: var(--good-soft); color: var(--good); }
+.kpi-badge.warn { background: var(--warn-soft); color: var(--warn); }
+.kpi-badge.neu  { background: var(--bg3); color: var(--text2); }
+
+.kpi-val {
+  font-family: var(--f-head);
+  font-size: 42px;
+  letter-spacing: -1.2px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.kpi-val .unit {
+  font-size: 18px;
+  color: var(--text3);
+  font-weight: 400;
+  margin-left: 4px;
+  letter-spacing: 0;
 }
 
-.section{
-  padding:20px 0;
+.kpi-foot {
+  font-size: 12.5px;
+  color: var(--text3);
 }
 
-.section-title{
-  margin-bottom:18px;
+.kpi-bar {
+  height: 5px;
+  background: var(--bg3);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 14px;
+}
+.kpi-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1.2s cubic-bezier(.4, 0, .2, 1);
+  background: var(--coral);
+}
+.kpi-fill.warn { background: var(--warn); }
+.kpi-fill.good { background: var(--good); }
+
+/* =============== PRODUCTS =============== */
+.products {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 32px;
 }
 
-.section-title span{
-  color:var(--primary);
-  text-transform:uppercase;
-  font-size:12px;
-  letter-spacing:2px;
-  font-weight:700;
+.prod {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  transition: all .25s;
+  position: relative;
+  overflow: hidden;
+}
+.prod:hover {
+  transform: translateY(-3px);
+  border-color: var(--coral);
+  box-shadow: var(--shadow);
 }
 
-.section-title h2{
-  margin-top:8px;
-  font-size:38px;
-  font-family:'DM Serif Display',serif;
+.prod-hero {
+  grid-row: span 2;
+  background: linear-gradient(155deg, var(--coral) 0%, var(--coral-d) 100%);
+  color: #FFF;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+.prod-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(255,255,255,.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+.prod-hero .prod-rank,
+.prod-hero .pn-lab,
+.prod-hero .prod-note { color: rgba(255,255,255,.85); }
+.prod-hero .prod-bar { background: rgba(255,255,255,.18); }
+.prod-hero .prod-fill { background: rgba(255,255,255,.95); }
+.prod-hero .prod-badge { background: rgba(255,255,255,.2); color: #FFF; }
+
+.prod-warn {
+  background: linear-gradient(155deg, var(--rose-soft) 0%, transparent 60%);
+  border-color: var(--rose);
 }
 
-.grid-4{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:16px;
+.prod-rank {
+  font-size: 10.5px;
+  color: var(--text3);
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+.prod-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+.prod-head h3 {
+  font-family: var(--f-head);
+  font-size: 24px;
+  letter-spacing: -0.4px;
+  line-height: 1;
+}
+.prod-badge {
+  font-size: 10.5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: var(--bg3);
+  color: var(--text2);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.prod-badge.hot   { background: var(--coral-soft); color: var(--coral); }
+.prod-badge.alert { background: var(--bad-soft); color: var(--bad); }
+.prod-badge.ok    { background: var(--good-soft); color: var(--good); }
+.prod-badge.warm  { background: var(--warn-soft); color: var(--warn); }
+
+.prod-nums {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.pn { display: flex; flex-direction: column; gap: 2px; }
+.pn-val {
+  font-family: var(--f-head);
+  font-size: 22px;
+  letter-spacing: -0.3px;
+  line-height: 1;
+}
+.pn-lab {
+  font-size: 10px;
+  color: var(--text3);
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
 }
 
-.grid-3{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
+.prod-bar {
+  height: 4px;
+  background: var(--bg3);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.prod-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--coral-d), var(--coral));
+}
+.prod-note {
+  font-size: 12.5px;
+  color: var(--text2);
+  line-height: 1.5;
 }
 
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:24px;
-  box-shadow:
-    0 1px 2px rgba(0,0,0,.02),
-    0 10px 30px rgba(0,0,0,.04);
-
-  transition:.2s;
+/* =============== CHART (FIXED HEIGHT — no infinite growth) =============== */
+.chart-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 28px;
 }
 
-.card:hover{
-  transform:translateY(-2px);
+.chart-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.chart-top h3 {
+  font-family: var(--f-head);
+  font-size: 22px;
+  letter-spacing: -0.3px;
+}
+.legend {
+  display: flex;
+  gap: 16px;
+  font-size: 12.5px;
+  color: var(--text2);
+}
+.legend span { display: flex; align-items: center; gap: 7px; }
+.legend i {
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  display: inline-block;
 }
 
-.card small{
-  color:var(--muted);
-  font-weight:600;
+/* CRITICAL FIX: фиксированная высота через wrapper */
+.chart-canvas-wrap {
+  position: relative;
+  height: 320px;
+  width: 100%;
+}
+.chart-canvas-wrap canvas {
+  position: absolute !important;
+  top: 0; left: 0;
+  width: 100% !important;
+  height: 100% !important;
 }
 
-.metric{
-  font-size:42px;
-  color:var(--primary);
-  margin:12px 0;
-  font-family:'DM Serif Display',serif;
+/* =============== FUNNEL =============== */
+/* Воронка теперь всегда на полную ширину контейнера, а пропорции показаны
+   через цветную «заливку» внутри. Так числа и текст всегда читаемы. */
+.funnel { display: flex; flex-direction: column; gap: 0; }
+
+.funnel-step {
+  width: 100%;
+  margin: 0 auto;
+  transition: all .4s ease;
 }
 
-.muted{
-  color:var(--text2);
-  line-height:1.6;
+.funnel-bar {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 22px 28px;
+  border-radius: var(--r-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  font-size: 15px;
+  box-shadow: var(--shadow-sm);
+  z-index: 0;
 }
 
-.products{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
+/* Цветная заливка показывает пропорцию */
+.funnel-bar::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: var(--w, 100%);
+  background: linear-gradient(90deg, var(--coral) 0%, var(--coral-l) 100%);
+  border-radius: var(--r-lg) 0 0 var(--r-lg);
+  z-index: -1;
+  transition: width 1s cubic-bezier(.4, 0, .2, 1);
 }
 
-.product{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:22px;
-  box-shadow:
-    0 1px 2px rgba(0,0,0,.02),
-    0 10px 30px rgba(0,0,0,.04);
+.funnel-bar > span,
+.funnel-bar > b {
+  position: relative;
+  z-index: 1;
+  /* Когда заливка частичная — текст должен быть читаем на обоих фонах */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .15);
 }
 
-.badge{
-  display:inline-flex;
-  padding:7px 12px;
-  border-radius:999px;
-  font-size:12px;
-  background:var(--primary-soft);
-  color:var(--primary);
-  margin-bottom:18px;
+.funnel-bar > span {
+  color: #FFF;
+  font-weight: 600;
 }
 
-.product h3{
-  font-size:30px;
-  margin-bottom:18px;
-  font-family:'DM Serif Display',serif;
+.funnel-bar > b {
+  font-family: var(--f-head);
+  font-size: 30px;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  text-shadow: none;
 }
 
-.product-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
+.funnel-step.success .funnel-bar::before {
+  background: linear-gradient(90deg, var(--mint-d) 0%, var(--mint) 100%);
 }
 
-.product-grid div{
-  background:var(--card-soft);
-  border-radius:14px;
-  padding:12px;
+.funnel-meta {
+  text-align: left;
+  font-size: 12.5px;
+  color: var(--text3);
+  margin-top: 8px;
+  padding-left: 4px;
 }
 
-.product-grid strong{
-  display:block;
-  font-size:20px;
-  margin-bottom:4px;
+.funnel-arrow {
+  text-align: left;
+  margin: 10px 0;
+  font-size: 14px;
+  color: var(--text3);
+  padding: 4px 0 4px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.funnel-arrow::before {
+  content: '↓';
+  font-size: 16px;
+  color: var(--coral);
+  font-weight: 600;
+}
+.funnel-arrow span {
+  font-size: 12.5px;
+  color: var(--bad);
+  font-weight: 500;
 }
 
-.product-grid span{
-  font-size:12px;
-  color:var(--muted);
+.funnel-insight {
+  background: linear-gradient(135deg, var(--coral-soft) 0%, transparent 100%);
+  border: 1px solid var(--coral);
+  border-radius: var(--r-lg);
+  padding: 24px 28px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 32px;
 }
 
-.chart-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:24px;
-  margin-top:18px;
-  box-shadow:
-    0 1px 2px rgba(0,0,0,.02),
-    0 10px 30px rgba(0,0,0,.04);
+.fi-icon { font-size: 28px; line-height: 1; }
+.funnel-insight h4 {
+  font-family: var(--f-head);
+  font-size: 20px;
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+.funnel-insight p { color: var(--text2); font-size: 13.5px; }
+
+/* =============== INSIGHTS =============== */
+.insights {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 32px;
 }
 
-.chart-wrap{
-  position:relative;
-  height:340px;
+.ins-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform .25s ease;
+}
+.ins-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.ins-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.ins-red::after   { background: var(--bad); }
+.ins-amber::after { background: var(--warn); }
+.ins-blue::after  { background: var(--teal); }
+.ins-green::after { background: var(--good); }
+
+.ins-pct {
+  font-family: var(--f-head);
+  font-size: 48px;
+  letter-spacing: -1.8px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.ins-red .ins-pct   { color: var(--bad); }
+.ins-amber .ins-pct { color: var(--warn); }
+.ins-blue .ins-pct  { color: var(--teal); }
+.ins-green .ins-pct { color: var(--good); }
+
+.ins-card h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.ins-card p {
+  font-size: 12.5px;
+  color: var(--text2);
+  margin-bottom: 14px;
+  line-height: 1.55;
+}
+.ins-quote {
+  font-style: italic;
+  font-family: var(--f-head);
+  font-size: 12.5px;
+  color: var(--text2);
+  padding: 10px 12px;
+  background: var(--bg2);
+  border-left: 2px solid currentColor;
+  border-radius: 4px;
+}
+.ins-red .ins-quote   { color: var(--bad); }
+.ins-amber .ins-quote { color: var(--warn); }
+.ins-blue .ins-quote  { color: var(--teal); }
+.ins-green .ins-quote { color: var(--good); }
+
+/* WORD CLOUD */
+.words-block {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 36px;
+  text-align: center;
+}
+.words-block h3 {
+  font-family: var(--f-head);
+  font-size: 22px;
+  margin-bottom: 28px;
+}
+.word-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 28px;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 0;
+}
+.word-cloud span {
+  font-family: var(--f-head);
+  transition: all .25s ease;
+  cursor: default;
+  line-height: 1;
+}
+.word-cloud span:hover { transform: scale(1.1); }
+
+.w-xl { font-size: 56px; color: var(--coral); }
+.w-l  { font-size: 38px; color: var(--mint-d); }
+.w-m  { font-size: 26px; color: var(--amber); }
+.w-s  { font-size: 19px; color: var(--text2); }
+.w-xs { font-size: 14px; color: var(--text3); }
+
+/* =============== ACTIONS =============== */
+.actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
 }
 
-.insight{
-  display:flex;
-  gap:16px;
-  align-items:flex-start;
+.act-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  transition: all .25s;
+  display: flex;
+  flex-direction: column;
+}
+.act-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+  border-color: var(--coral);
 }
 
-.dot{
-  width:14px;
-  height:14px;
-  border-radius:50%;
-  margin-top:7px;
-  background:var(--primary);
-  flex-shrink:0;
+.act-prio {
+  display: inline-block;
+  width: max-content;
+  font-size: 10.5px;
+  letter-spacing: 1.2px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 4px 11px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
+.prio-high .act-prio { background: var(--bad-soft); color: var(--bad); }
+.prio-mid .act-prio  { background: var(--warn-soft); color: var(--warn); }
+.prio-low .act-prio  { background: var(--teal-soft); color: var(--teal); }
+
+.act-card h3 {
+  font-family: var(--f-head);
+  font-size: 22px;
+  letter-spacing: -0.3px;
+  margin-bottom: 14px;
+  line-height: 1.2;
+}
+.act-card ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 16px;
+  flex-grow: 1;
+}
+.act-card ul li {
+  font-size: 13px;
+  color: var(--text2);
+  padding: 6px 0 6px 18px;
+  position: relative;
+  line-height: 1.5;
+}
+.act-card ul li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 13px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--coral);
 }
 
-.list{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
+.act-impact {
+  font-size: 12.5px;
+  color: var(--mint-d);
+  font-weight: 500;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border2);
+}
+:root[data-theme="dark"] .act-impact { color: var(--mint); }
+
+/* =============== BENCHMARKS =============== */
+.bench {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.bench-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 24px;
+}
+.bench-label {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 22px;
+  font-weight: 500;
+}
+.bench-track {
+  position: relative;
+  height: 38px;
+  background: var(--bg3);
+  border-radius: var(--r);
+  overflow: visible;
+  margin-bottom: 14px;
+}
+.bench-fill-bar {
+  height: 100%;
+  border-radius: var(--r);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFF;
+}
+.bench-fill-bar.bad  { background: linear-gradient(90deg, var(--bad), var(--coral)); }
+.bench-fill-bar.good { background: linear-gradient(90deg, var(--mint-d), var(--mint)); }
+
+.bench-target {
+  position: absolute;
+  top: -8px; bottom: -8px;
+  width: 2px;
+  background: var(--text);
+  border-radius: 2px;
+}
+.bench-target span {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10.5px;
+  background: var(--text);
+  color: var(--bg);
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-weight: 600;
+}
+.bench-note {
+  font-size: 12px;
+  color: var(--text3);
 }
 
-.list-item{
-  display:flex;
-  justify-content:space-between;
-  padding:14px 0;
-  border-bottom:1px solid var(--border);
+/* =============== FORECAST =============== */
+.forecast {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
 }
 
-.list-item:last-child{
-  border:none;
+.fc-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 28px;
+  text-align: center;
+  transition: all .25s;
+}
+.fc-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+
+.fc-tag {
+  display: inline-block;
+  font-size: 10.5px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 18px;
 }
 
-.progress{
-  width:100%;
-  height:10px;
-  border-radius:999px;
-  background:#EFE8DD;
-  overflow:hidden;
-  margin-top:10px;
+.fc-bad  .fc-tag { background: var(--bad-soft); color: var(--bad); }
+.fc-mid  .fc-tag { background: var(--bg3); color: var(--text2); }
+.fc-good .fc-tag { background: var(--good-soft); color: var(--good); }
+
+.fc-bad  { background: linear-gradient(180deg, var(--card) 0%, var(--bad-soft) 100%); }
+.fc-mid  { background: var(--card); }
+.fc-good { background: linear-gradient(180deg, var(--card) 0%, var(--good-soft) 100%); border-color: var(--good); }
+
+.fc-card h3 {
+  font-family: var(--f-head);
+  font-size: 64px;
+  letter-spacing: -2.5px;
+  line-height: 1;
+  margin-bottom: 22px;
+}
+.fc-bad h3  { color: var(--bad); }
+.fc-good h3 { color: var(--good); }
+
+.fc-card ul {
+  list-style: none;
+  text-align: left;
+  font-size: 13.5px;
+  color: var(--text2);
+}
+.fc-card ul li {
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+.fc-card ul li:last-child { border: none; }
+
+/* =============== DATA SOURCE =============== */
+.ds-card {
+  background: linear-gradient(135deg, #2A1B14 0%, #1A1108 100%);
+  color: #F4EFE6;
+  border-radius: var(--r-xl);
+  padding: 40px 44px;
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+}
+:root[data-theme="light"] .ds-card {
+  background: linear-gradient(135deg, var(--coral) 0%, var(--coral-d) 100%);
+}
+.ds-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% 30%, rgba(232,89,63,.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+.ds-icon { font-size: 44px; line-height: 1; position: relative; z-index: 1; }
+.ds-content { position: relative; z-index: 1; flex: 1; }
+.ds-content h3 {
+  font-family: var(--f-head);
+  font-size: 26px;
+  margin-bottom: 8px;
+  letter-spacing: -0.4px;
+}
+.ds-content > p {
+  font-size: 14px;
+  color: rgba(244,239,230,.85);
+  margin-bottom: 24px;
+  max-width: 720px;
 }
 
-.progress span{
-  display:block;
-  height:100%;
-  background:var(--primary);
-  border-radius:999px;
+.ds-pipe {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pipe-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,.1);
+  padding: 9px 14px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+.pipe-step b {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.18);
+  display: grid; place-items: center;
+  font-size: 11px;
+  font-family: var(--f-head);
+}
+.pipe-arrow { color: rgba(255,255,255,.4); font-size: 18px; }
+
+/* =============== FOOTER =============== */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 0;
+  margin-top: 24px;
+  background: var(--bg2);
+}
+.footer-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.footer-note {
+  font-size: 11.5px;
+  color: var(--text3);
+  margin-top: 6px;
+}
+.footer-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-size: 11.5px;
+  color: var(--text3);
 }
 
-footer{
-  padding:60px 0;
-  text-align:center;
-  color:var(--muted);
+/* =============== ANIMATIONS =============== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.kpi-card, .prod, .ins-card, .act-card, .fc-card, .bench-card {
+  animation: fadeInUp .55s ease-out backwards;
+}
+.kpi-card:nth-child(1) { animation-delay: .04s; }
+.kpi-card:nth-child(2) { animation-delay: .08s; }
+.kpi-card:nth-child(3) { animation-delay: .12s; }
+.kpi-card:nth-child(4) { animation-delay: .16s; }
+.kpi-card:nth-child(5) { animation-delay: .20s; }
+.kpi-card:nth-child(6) { animation-delay: .24s; }
+
+/* =============== RESPONSIVE =============== */
+@media (max-width: 1100px) {
+  .hero { grid-template-columns: 1fr; gap: 40px; padding: 56px 0; }
+  .hero h1 { font-size: 42px; }
+  .kpi-grid, .insights { grid-template-columns: repeat(2, 1fr); }
+  .products { grid-template-columns: repeat(2, 1fr); }
+  .actions, .bench, .forecast { grid-template-columns: 1fr; }
+  .fc-card h3 { font-size: 50px; }
 }
 
-.card,
-.product,
-.stat-card{
-  will-change:transform;
-  transform:translateZ(0);
+@media (max-width: 720px) {
+  .wrap, .topbar-inner, .footer-inner { padding: 0 18px; }
+  .topnav { display: none; }
+  .hero h1 { font-size: 32px; letter-spacing: -1px; }
+  .hero-sub { font-size: 14.5px; }
+  .kpi-grid, .insights, .products { grid-template-columns: 1fr; }
+  .prod-hero { grid-row: auto; }
+  .section-head h2 { font-size: 28px; }
+  .ds-card { flex-direction: column; padding: 28px; }
+  .ds-pipe { flex-direction: column; align-items: flex-start; }
+  .pipe-arrow { transform: rotate(90deg); }
+  .footer-inner { flex-direction: column; align-items: flex-start; }
+  .chart-canvas-wrap { height: 380px; }
+  .word-cloud { gap: 10px 16px; }
+  .w-xl { font-size: 38px; }
+  .w-l  { font-size: 26px; }
+  .w-m  { font-size: 20px; }
+  .funnel-bar { padding: 16px 18px; font-size: 13px; }
+  .funnel-bar > b { font-size: 22px; }
+  .live-pill { display: none; }
 }
 
-@media(max-width:1100px){
-
-  .hero{
-    grid-template-columns:1fr;
-  }
-
-  .grid-4,
-  .products{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .grid-3{
-    grid-template-columns:1fr;
-  }
-
+@media print {
+  .topbar, .footer { display: none; }
+  body::before, body::after { display: none; }
 }
-
-@media(max-width:700px){
-
-  .grid-4,
-  .products,
-  .stats{
-    grid-template-columns:1fr;
-  }
-
-  .hero h1{
-    font-size:44px;
-  }
-
-  .section-title h2{
-    font-size:32px;
-  }
-
-}
-
 </style>
 </head>
 <body>
 
-<header>
-<div class="container nav">
-
-  <div class="logo">
-
-    <div class="logo-box">
-      N
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-logo">N</div>
+      <div class="brand-text">
+        <span class="brand-name">Neoflam</span>
+        <span class="brand-sub">Uzbekistan · Sales Intelligence</span>
+      </div>
     </div>
-
-    <div class="logo-text">
-      <h2>Neoflam</h2>
-      <p>Uzbekistan · Executive Analytics</p>
+    <nav class="topnav">
+      <a href="#overview" class="active">Обзор</a>
+      <a href="#products">Товары</a>
+      <a href="#funnel">Воронка</a>
+      <a href="#insights">Инсайты</a>
+      <a href="#actions">Действия</a>
+    </nav>
+    <div class="topright">
+      <div class="live-pill">
+        <span class="live-dot"></span>
+        <span>10-day report</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+      </button>
     </div>
-
   </div>
-
-</div>
 </header>
 
-<section class="hero container">
-
-<div>
-
-  <h1>
-    Каждый запрос —
-    <span>возможность.</span>
-  </h1>
-
-  <p>
-    Executive dashboard Neoflam Uzbekistan.
-    Аналитическая система для отслеживания спроса,
-    конверсии, причин отказов и эффективности
-    продаж по продуктовым категориям.
-  </p>
-
-</div>
-
-<div class="stats">
-
-  <div class="stat-card">
-    <h2>317</h2>
-    <p>Запросов клиентов</p>
-  </div>
-
-  <div class="stat-card">
-    <h2>3</h2>
-    <p>Продажи за период</p>
-  </div>
-
-  <div class="stat-card">
-    <h2>0.95%</h2>
-    <p>Общая конверсия</p>
-  </div>
-
-  <div class="stat-card">
-    <h2>$300</h2>
-    <p>Выручка</p>
-  </div>
-
-</div>
-
-</section>
-
-<section class="section container">
-
-<div class="section-title">
-  <span>Overview</span>
-  <h2>Ключевые показатели</h2>
-</div>
-
-<div class="grid-4">
-
-  <div class="card">
-    <small>Instagram</small>
-    <div class="metric">85%</div>
-    <p class="muted">
-      Основной источник входящих обращений.
-    </p>
-  </div>
-
-  <div class="card">
-    <small>Главное возражение</small>
-    <div class="metric">42%</div>
-    <p class="muted">
-      Клиенты считают цену высокой
-      без понимания ценности.
-    </p>
-  </div>
-
-  <div class="card">
-    <small>CRM Follow-up</small>
-    <div class="metric">7.5%</div>
-    <p class="muted">
-      Потенциал повторного контакта
-      и догрева клиентов.
-    </p>
-  </div>
-
-  <div class="card">
-    <small>Potential Revenue</small>
-    <div class="metric">$2400</div>
-    <p class="muted">
-      Потенциал текущей воронки продаж.
-    </p>
-  </div>
-
-</div>
-
-</section>
-
-<section class="section container">
-
-<div class="section-title">
-  <span>Products</span>
-  <h2>Спрос по товарам</h2>
-</div>
-
-<div class="products">
-
-  <div class="product">
-
-    <div class="badge">🔥 Хит продаж</div>
-
-    <h3>Fika4</h3>
-
-    <div class="product-grid">
-
-      <div>
-        <strong>151</strong>
-        <span>Запросов</span>
+<!-- HERO -->
+<div class="wrap">
+  <section class="hero">
+    <div>
+      <div class="hero-eyebrow">Sales Intelligence · KPI Overview</div>
+      <h1>Каждый запрос клиента — <em>сигнал</em>.<br/>Каждый сигнал — <em>возможность</em>.</h1>
+      <p class="hero-sub">Внутренний аналитический контур филиала Neoflam в Узбекистане. Дашборд превращает сырые диалоги из Instagram и магазина в стратегические решения.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hs-val" data-counter="317">0</div>
+        <div class="hs-label">Запросов клиентов</div>
       </div>
-
-      <div>
-        <strong>2</strong>
-        <span>Продажи</span>
+      <div class="hero-stat">
+        <div class="hs-val" data-counter="3">0</div>
+        <div class="hs-label">Реальных продаж</div>
       </div>
-
-      <div>
-        <strong>1.3%</strong>
-        <span>Конверсия</span>
+      <div class="hero-stat">
+        <div class="hs-val">$<span data-counter="300">0</span></div>
+        <div class="hs-label">Выручка за период</div>
       </div>
+    </div>
+  </section>
+</div>
 
+<!-- KPI -->
+<div class="wrap">
+  <section class="section" id="overview">
+    <div class="section-head">
+      <div class="section-eyebrow">01 · Ключевые метрики</div>
+      <h2>Что говорят цифры</h2>
+      <p>Главные показатели за 10-дневный период</p>
     </div>
 
-  </div>
-
-  <div class="product">
-
-    <div class="badge">⚠ Потеря клиентов</div>
-
-    <h3>Bebe</h3>
-
-    <div class="product-grid">
-
-      <div>
-        <strong>88</strong>
-        <span>Запросов</span>
-      </div>
-
-      <div>
-        <strong>0</strong>
-        <span>Продажи</span>
-      </div>
-
-      <div>
-        <strong>0%</strong>
-        <span>Конверсия</span>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="product">
-
-    <div class="badge">✓ Хорошая конверсия</div>
-
-    <h3>Fika6</h3>
-
-    <div class="product-grid">
-
-      <div>
-        <strong>23</strong>
-        <span>Запросов</span>
-      </div>
-
-      <div>
-        <strong>1</strong>
-        <span>Продажи</span>
-      </div>
-
-      <div>
-        <strong>4.3%</strong>
-        <span>Конверсия</span>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="product">
-
-    <div class="badge">⏳ Низкий спрос</div>
-
-    <h3>Qozon</h3>
-
-    <div class="product-grid">
-
-      <div>
-        <strong>8</strong>
-        <span>Запросов</span>
-      </div>
-
-      <div>
-        <strong>0</strong>
-        <span>Продажи</span>
-      </div>
-
-      <div>
-        <strong>0%</strong>
-        <span>Конверсия</span>
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-<div class="chart-card">
-
-  <div class="section-title">
-    <span>Analytics</span>
-    <h2 style="font-size:32px">
-      Спрос vs продажи
-    </h2>
-  </div>
-
-  <div class="chart-wrap">
-    <canvas id="chart"></canvas>
-  </div>
-
-</div>
-
-</section>
-
-<section class="section container">
-
-<div class="grid-3">
-
-  <div class="card">
-
-    <div class="section-title">
-      <span>Reasons</span>
-      <h2 style="font-size:30px">
-        Причины отказов
-      </h2>
-    </div>
-
-    <div class="list">
-
-      <div>
-        <div class="list-item">
-          <span>Высокая цена</span>
-          <strong>42%</strong>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Конверсия спрос → продажа</span>
+          <span class="kpi-badge down">▼ −80%</span>
         </div>
-        <div class="progress">
-          <span style="width:42%"></span>
+        <div class="kpi-val">0.95<span class="unit">%</span></div>
+        <div class="kpi-foot">Бенчмарк по нише: 3-5%</div>
+        <div class="kpi-bar"><div class="kpi-fill" style="width:19%"></div></div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Instagram-канал</span>
+          <span class="kpi-badge up">270 запросов</span>
+        </div>
+        <div class="kpi-val">85<span class="unit">% траф.</span></div>
+        <div class="kpi-foot">Главный источник лидов</div>
+        <div class="kpi-bar"><div class="kpi-fill good" style="width:85%"></div></div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Магазин (офлайн)</span>
+          <span class="kpi-badge warn">47 запросов</span>
+        </div>
+        <div class="kpi-val">15<span class="unit">% траф.</span></div>
+        <div class="kpi-foot">0 продаж — нужен скрипт</div>
+        <div class="kpi-bar"><div class="kpi-fill warn" style="width:15%"></div></div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Средний чек</span>
+          <span class="kpi-badge neu">2 сделки</span>
+        </div>
+        <div class="kpi-val">$150</div>
+        <div class="kpi-foot">Выше рынка ($100) в 1.5×</div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">«Дорого» — главное возражение</span>
+          <span class="kpi-badge down">⚠ Критично</span>
+        </div>
+        <div class="kpi-val">134<span class="unit">/ 317</span></div>
+        <div class="kpi-foot">42% клиентов уходят из-за цены</div>
+        <div class="kpi-bar"><div class="kpi-fill warn" style="width:42%"></div></div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Потенциал в воронке</span>
+          <span class="kpi-badge up">▲ Догрев</span>
+        </div>
+        <div class="kpi-val">$2,400</div>
+        <div class="kpi-foot">«Отложенные» клиенты</div>
+        <div class="kpi-bar"><div class="kpi-fill good" style="width:72%"></div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PRODUCTS -->
+<div class="wrap">
+  <section class="section" id="products">
+    <div class="section-head">
+      <div class="section-eyebrow">02 · Каталог</div>
+      <h2>Товары — спрос и конверсия</h2>
+      <p>Что хочет рынок и где утечка прибыли</p>
+    </div>
+
+    <div class="products">
+
+      <div class="prod prod-hero">
+        <div class="prod-rank">#1 · ХИТ ПРОДАЖ</div>
+        <div class="prod-head">
+          <h3>Fika4</h3>
+          <span class="prod-badge">🔥 Хит</span>
+        </div>
+        <div class="prod-nums">
+          <div class="pn"><span class="pn-val">151</span><span class="pn-lab">запросов</span></div>
+          <div class="pn"><span class="pn-val">2</span><span class="pn-lab">продажи</span></div>
+          <div class="pn"><span class="pn-val">1.3%</span><span class="pn-lab">конверсия</span></div>
+        </div>
+        <div class="prod-bar"><div class="prod-fill" style="width:100%"></div></div>
+        <p class="prod-note">Серия Fika — скандинавский дизайн с натуральной деревянной ручкой. Ядро спроса. Усилить контентом и видеообзорами.</p>
+      </div>
+
+      <div class="prod prod-warn">
+        <div class="prod-rank">#2</div>
+        <div class="prod-head">
+          <h3>Bebe</h3>
+          <span class="prod-badge alert">⚠ 0 продаж</span>
+        </div>
+        <div class="prod-nums">
+          <div class="pn"><span class="pn-val">88</span><span class="pn-lab">запросов</span></div>
+          <div class="pn"><span class="pn-val">0</span><span class="pn-lab">продаж</span></div>
+          <div class="pn"><span class="pn-val">0%</span><span class="pn-lab">конверсия</span></div>
+        </div>
+        <div class="prod-bar"><div class="prod-fill" style="width:58%"></div></div>
+        <p class="prod-note">Огромный интерес, но всех останавливает цена. Серия для детей — нужен фокус на безопасности (PFOA-free, эко-керамика).</p>
+      </div>
+
+      <div class="prod">
+        <div class="prod-rank">#3</div>
+        <div class="prod-head"><h3>Fika6</h3><span class="prod-badge ok">✓</span></div>
+        <div class="prod-nums">
+          <div class="pn"><span class="pn-val">23</span><span class="pn-lab">запросов</span></div>
+          <div class="pn"><span class="pn-val">1</span><span class="pn-lab">$300</span></div>
+          <div class="pn"><span class="pn-val">4.3%</span><span class="pn-lab">конверсия</span></div>
+        </div>
+        <div class="prod-bar"><div class="prod-fill" style="width:15%"></div></div>
+      </div>
+
+      <div class="prod">
+        <div class="prod-rank">#4</div>
+        <div class="prod-head"><h3>Vakuum</h3><span class="prod-badge alert">⚠</span></div>
+        <div class="prod-nums">
+          <div class="pn"><span class="pn-val">23</span><span class="pn-lab">запросов</span></div>
+          <div class="pn"><span class="pn-val">0</span><span class="pn-lab">продаж</span></div>
+          <div class="pn"><span class="pn-val">0%</span><span class="pn-lab">конверсия</span></div>
+        </div>
+        <div class="prod-bar"><div class="prod-fill" style="width:15%"></div></div>
+      </div>
+
+      <div class="prod">
+        <div class="prod-rank">#5</div>
+        <div class="prod-head"><h3>Blinnitsa</h3><span class="prod-badge alert">⚠</span></div>
+        <div class="prod-nums">
+          <div class="pn"><span class="pn-val">15</span><span class="pn-lab">запросов</span></div>
+          <div class="pn"><span class="pn-val">0</span><span class="pn-lab">продаж</span></div>
+          <div class="pn"><span class="pn-val">0%</span><span class="pn-lab">конверсия</span></div>
+        </div>
+        <div class="prod-bar"><div class="prod-fill" style="width:10%"></div></div>
+      </div>
+
+      <div class="prod">
+        <div class="prod-rank">#6</div>
+        <div class="prod-head"><h3>Bein</h3><span class="prod-badge">·</span></div>
+        <div class="prod-nums">
+          <div class="pn"><span class="pn-val">8</span><span class="pn-lab">запросов</span></div>
+          <div class="pn"><span class="pn-val">0</span><span class="pn-lab">продаж</span></div>
+          <div class="pn"><span class="pn-val">0%</span><span class="pn-lab">конверсия</span></div>
+        </div>
+        <div class="prod-bar"><div class="prod-fill" style="width:5%"></div></div>
+      </div>
+
+      <div class="prod">
+        <div class="prod-rank">#7</div>
+        <div class="prod-head"><h3>Qozon</h3><span class="prod-badge warm">⏳</span></div>
+        <div class="prod-nums">
+          <div class="pn"><span class="pn-val">8</span><span class="pn-lab">запросов</span></div>
+          <div class="pn"><span class="pn-val">0</span><span class="pn-lab">продаж</span></div>
+          <div class="pn"><span class="pn-val">0%</span><span class="pn-lab">конверсия</span></div>
+        </div>
+        <div class="prod-bar"><div class="prod-fill" style="width:5%"></div></div>
+        <p class="prod-note">Часть клиентов — «куплю позже». Кандидаты для CRM-догрева.</p>
+      </div>
+
+      <div class="prod">
+        <div class="prod-rank">#8</div>
+        <div class="prod-head"><h3>Sherbet</h3><span class="prod-badge">·</span></div>
+        <div class="prod-nums">
+          <div class="pn"><span class="pn-val">1</span><span class="pn-lab">запрос</span></div>
+          <div class="pn"><span class="pn-val">0</span><span class="pn-lab">продаж</span></div>
+          <div class="pn"><span class="pn-val">0%</span><span class="pn-lab">конверсия</span></div>
+        </div>
+        <div class="prod-bar"><div class="prod-fill" style="width:1%"></div></div>
+      </div>
+
+    </div>
+
+    <div class="chart-box">
+      <div class="chart-top">
+        <h3>Распределение спроса по товарам</h3>
+        <div class="legend">
+          <span><i style="background:var(--coral)"></i>Запросы</span>
+          <span><i style="background:var(--mint)"></i>Продажи</span>
         </div>
       </div>
-
-      <div>
-        <div class="list-item">
-          <span>Подумаю позже</span>
-          <strong>24%</strong>
-        </div>
-        <div class="progress">
-          <span style="width:24%"></span>
-        </div>
+      <div class="chart-canvas-wrap">
+        <canvas id="productsChart"></canvas>
       </div>
-
-      <div>
-        <div class="list-item">
-          <span>Нет нужного цвета</span>
-          <strong>17%</strong>
-        </div>
-        <div class="progress">
-          <span style="width:17%"></span>
-        </div>
-      </div>
-
     </div>
-
-  </div>
-
-  <div class="card">
-
-    <div class="section-title">
-      <span>Insights</span>
-      <h2 style="font-size:30px">
-        Главные выводы
-      </h2>
-    </div>
-
-    <div class="list">
-
-      <div class="insight">
-        <div class="dot"></div>
-        <p class="muted">
-          Fika4 генерирует основной спрос,
-          но требует улучшения продаж.
-        </p>
-      </div>
-
-      <div class="insight">
-        <div class="dot"></div>
-        <p class="muted">
-          Клиенты не понимают разницу
-          между Neoflam и mass-market.
-        </p>
-      </div>
-
-      <div class="insight">
-        <div class="dot"></div>
-        <p class="muted">
-          Instagram остаётся главным
-          каналом лидогенерации.
-        </p>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="card">
-
-    <div class="section-title">
-      <span>Recommendations</span>
-      <h2 style="font-size:30px">
-        Рекомендации
-      </h2>
-    </div>
-
-    <div class="list">
-
-      <div class="insight">
-        <div class="dot"></div>
-        <p class="muted">
-          Добавить объяснение premium-ценности
-          в Instagram контент.
-        </p>
-      </div>
-
-      <div class="insight">
-        <div class="dot"></div>
-        <p class="muted">
-          Настроить CRM-догрев
-          для клиентов “подумаю позже”.
-        </p>
-      </div>
-
-      <div class="insight">
-        <div class="dot"></div>
-        <p class="muted">
-          Сделать comparison контент
-          против обычной посуды.
-        </p>
-      </div>
-
-    </div>
-
-  </div>
-
+  </section>
 </div>
 
-</section>
+<!-- FUNNEL -->
+<div class="wrap">
+  <section class="section" id="funnel">
+    <div class="section-head">
+      <div class="section-eyebrow">03 · Воронка</div>
+      <h2>Где утекают клиенты</h2>
+      <p>Каждый этап показывает, сколько людей доходит до следующего шага</p>
+    </div>
 
-<footer>
-Neoflam Uzbekistan · Internal Executive Dashboard · 2026
+    <div class="funnel">
+      <div class="funnel-step" style="--w:100%">
+        <div class="funnel-bar"><span>Запросы клиентов</span><b>317</b></div>
+        <div class="funnel-meta">100% · все, кто написал или пришёл</div>
+      </div>
+      <div class="funnel-arrow"><span>−42% уходят на этапе «дорого»</span></div>
+
+      <div class="funnel-step" style="--w:58%">
+        <div class="funnel-bar"><span>Узнали инфо + цену</span><b>183</b></div>
+        <div class="funnel-meta">58% · получили подробную информацию</div>
+      </div>
+      <div class="funnel-arrow"><span>−87% не получили оффер</span></div>
+
+      <div class="funnel-step" style="--w:8%">
+        <div class="funnel-bar"><span>Готовы к покупке</span><b>24</b></div>
+        <div class="funnel-meta">7.5% · «куплю позже» / задают вопросы по доставке</div>
+      </div>
+      <div class="funnel-arrow"><span>−87% теряются без напоминания</span></div>
+
+      <div class="funnel-step success" style="--w:1%">
+        <div class="funnel-bar"><span>Купили</span><b>3</b></div>
+        <div class="funnel-meta">0.95% · итоговая конверсия</div>
+      </div>
+    </div>
+
+    <div class="funnel-insight">
+      <div class="fi-icon">💡</div>
+      <div>
+        <h4>Главная утечка — между «узнали цену» и «решили купить»</h4>
+        <p>134 клиента ушли просто услышав цену. Это значит ценность товара не была донесена ДО озвучивания цены. Решение — переработка контент-стратегии и скриптов: сначала эмоция и польза, потом цена.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- INSIGHTS -->
+<div class="wrap">
+  <section class="section" id="insights">
+    <div class="section-head">
+      <div class="section-eyebrow">04 · Голос клиента</div>
+      <h2>Что реально говорят люди</h2>
+      <p>Главные паттерны в обращениях</p>
+    </div>
+
+    <div class="insights">
+      <div class="ins-card ins-red">
+        <div class="ins-pct">42%</div>
+        <h4>«Дорого»</h4>
+        <p>Самое частое возражение. Особенно в категориях Bebe (детская посуда) и Vakuum (вакуумные наборы).</p>
+        <div class="ins-quote">— Просили цену, цена оказалась дорогой</div>
+      </div>
+
+      <div class="ins-card ins-amber">
+        <div class="ins-pct">7.5%</div>
+        <h4>«Куплю позже»</h4>
+        <p>Клиенты заинтересованы, но откладывают. Без CRM-напоминания 90% из них теряются.</p>
+        <div class="ins-quote">— Некоторые сказали, что позже купят</div>
+      </div>
+
+      <div class="ins-card ins-blue">
+        <div class="ins-pct">58%</div>
+        <h4>«Инфо + цена»</h4>
+        <p>Большинство хотят детальную информацию до покупки. Контент должен закрывать вопросы заранее.</p>
+        <div class="ins-quote">— Просили инфо о товаре и цену</div>
+      </div>
+
+      <div class="ins-card ins-green">
+        <div class="ins-pct">0.95%</div>
+        <h4>«Беру»</h4>
+        <p>Те, кто доходит до покупки — берут уверенно. Серия Fika — лидер. Вопрос в количестве доходящих.</p>
+        <div class="ins-quote">— Понравилось качество и дизайн</div>
+      </div>
+    </div>
+
+    <div class="words-block">
+      <h3>Частые слова в комментариях клиентов</h3>
+      <div class="word-cloud">
+        <span class="w-xl">дорого</span>
+        <span class="w-l">цена</span>
+        <span class="w-l">позже</span>
+        <span class="w-m">красиво</span>
+        <span class="w-m">безопасно</span>
+        <span class="w-m">подумаю</span>
+        <span class="w-s">оригинал</span>
+        <span class="w-s">керамика</span>
+        <span class="w-s">скидка</span>
+        <span class="w-s">рассрочка</span>
+        <span class="w-xs">дети</span>
+        <span class="w-xs">подарок</span>
+        <span class="w-xs">качество</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ACTIONS -->
+<div class="wrap">
+  <section class="section" id="actions">
+    <div class="section-head">
+      <div class="section-eyebrow">05 · План действий</div>
+      <h2>Что делать на 30 дней</h2>
+      <p>Приоритеты P0/P1/P2 — от самого срочного</p>
+    </div>
+
+    <div class="actions">
+      <div class="act-card prio-high">
+        <div class="act-prio">P0 · Срочно</div>
+        <h3>Отработка возражения «дорого»</h3>
+        <ul>
+          <li>Внедрить рассрочку 6/12/24 мес</li>
+          <li>Подсветить срок службы — стоимость в день</li>
+          <li>Бандлы: Fika4 + Fika6 = −15%</li>
+        </ul>
+        <div class="act-impact">📈 Потенциал: +30-50% к конверсии</div>
+      </div>
+
+      <div class="act-card prio-high">
+        <div class="act-prio">P0 · Срочно</div>
+        <h3>Реанимация Bebe</h3>
+        <ul>
+          <li>Серия рилсов о безопасности (PFOA/PTFE-free)</li>
+          <li>UGC от мам-блогеров Узбекистана</li>
+          <li>Сертификаты безопасности в карточке</li>
+        </ul>
+        <div class="act-impact">📈 88 «горячих» клиентов в воронке</div>
+      </div>
+
+      <div class="act-card prio-mid">
+        <div class="act-prio">P1 · 2 недели</div>
+        <h3>CRM-догрев «отложенных»</h3>
+        <ul>
+          <li>База всех «куплю позже»</li>
+          <li>Касание через 3 / 7 / 14 дней</li>
+          <li>Спецоффер с дедлайном (FOMO)</li>
+        </ul>
+        <div class="act-impact">📈 До $2,400 в догреве</div>
+      </div>
+
+      <div class="act-card prio-mid">
+        <div class="act-prio">P1 · 2 недели</div>
+        <h3>Контент-воронка Instagram</h3>
+        <ul>
+          <li>5+ рилсов по Fika4 (рецепты, демо)</li>
+          <li>Сторис «вопрос-ответ»</li>
+          <li>Цена показывается ПОСЛЕ ценности</li>
+        </ul>
+        <div class="act-impact">📈 Снижение «дорого»-возражений</div>
+      </div>
+
+      <div class="act-card prio-low">
+        <div class="act-prio">P2 · 1 месяц</div>
+        <h3>Скрипт офлайн-продаж</h3>
+        <ul>
+          <li>Обучение продавцов (2 часа)</li>
+          <li>Демонстрация качества «вживую»</li>
+          <li>Альтернатива из бюджетной линейки</li>
+        </ul>
+        <div class="act-impact">📈 47 запросов → 3-5 продаж</div>
+      </div>
+
+      <div class="act-card prio-low">
+        <div class="act-prio">P2 · 1 месяц</div>
+        <h3>A/B тест промо-механик</h3>
+        <ul>
+          <li>Скидка 10% vs подарок vs доставка</li>
+          <li>Замер на 100 диалогах каждой</li>
+          <li>Масштабирование победителя</li>
+        </ul>
+        <div class="act-impact">📈 Знание реальных триггеров</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- BENCHMARKS -->
+<div class="wrap">
+  <section class="section">
+    <div class="section-head">
+      <div class="section-eyebrow">06 · Бенчмарки</div>
+      <h2>Где Neoflam UZ относительно индустрии</h2>
+      <p>Сравнение с эталонами рынка кухонной посуды</p>
+    </div>
+
+    <div class="bench">
+      <div class="bench-card">
+        <div class="bench-label">Конверсия Instagram → продажа</div>
+        <div class="bench-track">
+          <div class="bench-fill-bar bad" style="width:25%"><span>1%</span></div>
+          <div class="bench-target" style="left:60%"><span>3-5% бенч</span></div>
+        </div>
+        <div class="bench-note">Ниже индустрии в 3-5 раз. Главная зона роста.</div>
+      </div>
+
+      <div class="bench-card">
+        <div class="bench-label">Доля «дорого» в возражениях</div>
+        <div class="bench-track">
+          <div class="bench-fill-bar bad" style="width:84%"><span>42%</span></div>
+          <div class="bench-target" style="left:50%"><span>20-25% бенч</span></div>
+        </div>
+        <div class="bench-note">В 1.7× выше нормы. Проблема в позиционировании, не в цене.</div>
+      </div>
+
+      <div class="bench-card">
+        <div class="bench-label">Средний чек ($)</div>
+        <div class="bench-track">
+          <div class="bench-fill-bar good" style="width:75%"><span>$150</span></div>
+          <div class="bench-target" style="left:50%"><span>$100 бенч</span></div>
+        </div>
+        <div class="bench-note">Выше рынка в 1.5×. Премиум-позиционирование оправдано.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FORECAST -->
+<div class="wrap">
+  <section class="section">
+    <div class="section-head">
+      <div class="section-eyebrow">07 · Прогноз</div>
+      <h2>Сценарии на следующие 30 дней</h2>
+      <p>Три варианта развития на основе текущей динамики</p>
+    </div>
+
+    <div class="forecast">
+      <div class="fc-card fc-bad">
+        <div class="fc-tag">Пессимистичный</div>
+        <h3>−10%</h3>
+        <ul>
+          <li>Если ничего не менять</li>
+          <li>~285 запросов</li>
+          <li>~3 продажи</li>
+          <li>~$270 выручки</li>
+        </ul>
+      </div>
+      <div class="fc-card fc-mid">
+        <div class="fc-tag">Базовый</div>
+        <h3>×1.0</h3>
+        <ul>
+          <li>Сохранение динамики</li>
+          <li>~317 запросов</li>
+          <li>~3 продажи</li>
+          <li>~$300 выручки</li>
+        </ul>
+      </div>
+      <div class="fc-card fc-good">
+        <div class="fc-tag">Оптимистичный</div>
+        <h3>×3.5</h3>
+        <ul>
+          <li>С внедрением P0-действий</li>
+          <li>~400+ запросов</li>
+          <li>~10-12 продаж</li>
+          <li>~$1,500-2,000 выручки</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- DATA SOURCE -->
+<div class="wrap">
+  <section class="section">
+    <div class="ds-card">
+      <div class="ds-icon">📊</div>
+      <div class="ds-content">
+        <h3>Источник данных</h3>
+        <p>Дашборд работает на данных, которые менеджер вводит через Google-форму после каждого диалога с клиентом. Когда придут разбивки по дням — здесь появится живая динамика и графики week-over-week.</p>
+        <div class="ds-pipe">
+          <div class="pipe-step"><b>1</b><span>Диалог</span></div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-step"><b>2</b><span>Google Form (10 сек)</span></div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-step"><b>3</b><span>Google Sheets</span></div>
+          <div class="pipe-arrow">→</div>
+          <div class="pipe-step"><b>4</b><span>Этот дашборд</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="brand">
+        <div class="brand-logo">N</div>
+        <div class="brand-text">
+          <span class="brand-name">Neoflam Uzbekistan</span>
+          <span class="brand-sub">Sales Intelligence Dashboard</span>
+        </div>
+      </div>
+      <p class="footer-note">Внутренний инструмент аналитики. Не для внешнего использования.</p>
+    </div>
+    <div class="footer-meta">
+      <span>v2.0 · 10-day report</span>
+      <span>Built with care · 2026</span>
+    </div>
+  </div>
 </footer>
 
+<!-- Chart.js — load with defer to avoid blocking -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+
 <script>
+(function() {
+  'use strict';
 
-const ctx = document.getElementById('chart');
+  // ============ THEME TOGGLE ============
+  const root = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  const STORAGE_KEY = 'neoflam-theme';
 
-new Chart(ctx, {
+  // Применяем сохранённую тему или системную
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    root.setAttribute('data-theme', saved);
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+    root.setAttribute('data-theme', 'light');
+  }
 
-  type:'bar',
+  toggle.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem(STORAGE_KEY, next);
 
-  data:{
+    // Если график уже создан — перерисуем с новыми цветами
+    if (window._productsChart) {
+      updateChartTheme();
+    }
+  });
 
-    labels:[
-      'Fika4',
-      'Bebe',
-      'Fika6',
-      'Vakuum',
-      'Blinnitsa',
-      'Qozon'
-    ],
+  // ============ ANIMATED COUNTERS ============
+  function animateCounter(el, target, duration = 1400) {
+    const start = 0;
+    const endVal = parseInt(String(target).replace(/[^\d]/g, ''));
+    if (isNaN(endVal)) return;
+    const startTime = performance.now();
 
-    datasets:[
+    function tick(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(start + (endVal - start) * eased);
+      el.textContent = current.toLocaleString('en-US');
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
 
-      {
-        label:'Запросы',
-        data:[151,88,23,23,15,8],
-        backgroundColor:'rgba(240,90,74,.88)',
-        borderRadius:10,
-        maxBarThickness:32
-      },
-
-      {
-        label:'Продажи',
-        data:[2,0,1,0,0,0],
-        backgroundColor:'rgba(255,123,107,.95)',
-        borderRadius:10,
-        maxBarThickness:32
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        animateCounter(el, el.dataset.counter);
+        counterObserver.unobserve(el);
       }
+    });
+  }, { threshold: 0.4 });
 
-    ]
+  document.querySelectorAll('[data-counter]').forEach(el => {
+    counterObserver.observe(el);
+  });
 
-  },
+  // ============ SMOOTH SCROLL ============
+  document.querySelectorAll('.topnav a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          const offset = 84;
+          const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      }
+    });
+  });
 
-  options:{
+  // ============ ACTIVE NAV ON SCROLL ============
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.topnav a');
 
-    responsive:true,
-    maintainAspectRatio:false,
+  let scrollTimeout;
+  window.addEventListener('scroll', () => {
+    if (scrollTimeout) return;
+    scrollTimeout = requestAnimationFrame(() => {
+      const scrollPos = window.scrollY + 120;
+      sections.forEach(section => {
+        const top = section.offsetTop;
+        const height = section.offsetHeight;
+        const id = section.getAttribute('id');
+        if (scrollPos >= top && scrollPos < top + height) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector('.topnav a[href="#' + id + '"]');
+          if (active) active.classList.add('active');
+        }
+      });
+      scrollTimeout = null;
+    });
+  });
 
-    animation:false,
+  // ============ CHART (lazy-init on visibility) ============
+  function getThemeColors() {
+    const styles = getComputedStyle(document.documentElement);
+    return {
+      coral: styles.getPropertyValue('--coral').trim() || '#E8593F',
+      mint:  styles.getPropertyValue('--mint').trim() || '#6FB89C',
+      text:  styles.getPropertyValue('--text2').trim() || '#A4ACB8',
+      grid:  styles.getPropertyValue('--border').trim() || '#262A32',
+      bg:    styles.getPropertyValue('--bg').trim() || '#14161A',
+    };
+  }
 
-    plugins:{
+  function buildChart() {
+    const ctx = document.getElementById('productsChart');
+    if (!ctx || typeof Chart === 'undefined') return;
 
-      legend:{
-        labels:{
-          color:'#5F5B57',
-          font:{
-            family:'DM Sans'
+    const c = getThemeColors();
+
+    Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
+    Chart.defaults.color = c.text;
+
+    window._productsChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Fika4', 'Bebe', 'Fika6', 'Vakuum', 'Blinnitsa', 'Bein', 'Qozon', 'Sherbet'],
+        datasets: [
+          {
+            label: 'Запросы',
+            data: [151, 88, 23, 23, 15, 8, 8, 1],
+            backgroundColor: c.coral,
+            borderRadius: 6,
+            borderSkipped: false,
+            barPercentage: 0.7,
+            categoryPercentage: 0.8,
+          },
+          {
+            label: 'Продажи',
+            data: [2, 0, 1, 0, 0, 0, 0, 0],
+            backgroundColor: c.mint,
+            borderRadius: 6,
+            borderSkipped: false,
+            barPercentage: 0.7,
+            categoryPercentage: 0.8,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,    // CRITICAL: контейнер задаёт высоту
+        animation: { duration: 1000, easing: 'easeOutQuart' },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: c.bg,
+            borderColor: c.coral,
+            borderWidth: 1,
+            titleFont: { size: 13, weight: '600' },
+            bodyFont:  { size: 13 },
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: true,
+            boxPadding: 4,
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            border: { color: c.grid },
+            ticks: { font: { size: 12, weight: '500' } },
+          },
+          y: {
+            grid: { color: c.grid, drawBorder: false },
+            border: { display: false },
+            ticks: { font: { size: 11 }, padding: 8 },
+            beginAtZero: true,
           }
         }
       }
-
-    },
-
-    scales:{
-
-      x:{
-        ticks:{
-          color:'#5F5B57'
-        },
-        grid:{
-          display:false
-        }
-      },
-
-      y:{
-        ticks:{
-          color:'#5F5B57'
-        },
-        grid:{
-          color:'rgba(0,0,0,.05)'
-        }
-      }
-
-    }
-
+    });
   }
 
-});
+  function updateChartTheme() {
+    if (!window._productsChart) return;
+    const c = getThemeColors();
+    const chart = window._productsChart;
+    chart.data.datasets[0].backgroundColor = c.coral;
+    chart.data.datasets[1].backgroundColor = c.mint;
+    chart.options.scales.x.ticks.color = c.text;
+    chart.options.scales.y.ticks.color = c.text;
+    chart.options.scales.y.grid.color = c.grid;
+    chart.options.scales.x.border.color = c.grid;
+    chart.options.plugins.tooltip.backgroundColor = c.bg;
+    Chart.defaults.color = c.text;
+    chart.update('none');
+  }
 
+  // Lazy init: создаём график только когда он попадает в зону видимости
+  function initChartLazy() {
+    const target = document.getElementById('productsChart');
+    if (!target) return;
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          buildChart();
+          obs.disconnect();
+        }
+      });
+    }, { rootMargin: '100px' });
+    obs.observe(target);
+  }
+
+  // Ждём загрузки Chart.js (т.к. defer)
+  if (typeof Chart !== 'undefined') {
+    initChartLazy();
+  } else {
+    window.addEventListener('load', initChartLazy);
+  }
+
+  // ============ FUNNEL ANIMATION ============
+  const funnelObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+        funnelObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('.funnel-step').forEach((step, i) => {
+    step.style.opacity = '0';
+    step.style.transform = 'translateY(20px)';
+    step.style.transition = 'all .55s ease ' + (i * 0.12) + 's';
+    funnelObserver.observe(step);
+  });
+
+})();
 </script>
 
 </body>
 </html>
-```
