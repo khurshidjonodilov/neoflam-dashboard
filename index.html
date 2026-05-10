@@ -3,13 +3,282 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Neoflam Uzbekistan — внутренний дашборд аналитики спроса и продаж" />
-<title>Neoflam UZ — Sales Intelligence Dashboard</title>
+<title>Neoflam UZ — Sales Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍳%3C/text%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0D1117;
+  --bg2:#141B24;
+  --bg3:#1C2631;
+  --card:#1C2631;
+  --card2:#243040;
+  --border:#263040;
+  --border2:#2E3D50;
+  --text:#F0F4F8;
+  --text2:#8BA3BD;
+  --text3:#4D6580;
+  --teal:#00C9A7;
+  --teal-d:#008F76;
+  --teal-soft:rgba(0,201,167,.12);
+  --teal-soft2:rgba(0,201,167,.06);
+  --amber:#F5A623;
+  --amber-soft:rgba(245,166,35,.12);
+  --red:#F05252;
+  --red-soft:rgba(240,82,82,.12);
+  --rose:#E879A0;
+  --rose-soft:rgba(232,121,160,.1);
+  --green:#4ADE80;
+  --green-soft:rgba(74,222,128,.1);
+  --f-head:'DM Serif Display',Georgia,serif;
+  --f-body:'DM Sans',system-ui,sans-serif;
+  --r:10px;
+  --r-lg:16px;
+}
+html,body{font-family:var(--f-body);font-size:15px;line-height:1.6;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+
+/* NOISE OVERLAY */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+
+/* GLOW BLOB */
+body::after{content:'';position:fixed;top:-20vh;left:30%;width:60vw;height:60vh;background:radial-gradient(ellipse at center,rgba(0,201,167,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(13,17,23,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.topbar-inner{max-width:1300px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;height:64px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--teal) 0%,var(--teal-d) 100%);display:grid;place-items:center;font-family:var(--f-head);font-size:18px;font-weight:700;color:#0D1117;letter-spacing:-0.5px;box-shadow:0 0 20px rgba(0,201,167,.3)}
+.brand-name{font-family:var(--f-head);font-size:19px;letter-spacing:-0.3px}
+.brand-sub{font-size:10.5px;color:var(--text3);letter-spacing:0.8px;text-transform:uppercase;margin-top:1px}
+.topnav{display:flex;gap:2px}
+.topnav a{padding:7px 14px;font-size:13px;font-weight:500;color:var(--text2);border-radius:8px;transition:all .2s}
+.topnav a:hover{background:var(--bg3);color:var(--text)}
+.topnav a.active{background:var(--teal-soft);color:var(--teal)}
+.live-pill{display:flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid var(--border2);border-radius:20px;font-size:12px;font-weight:500;color:var(--text2)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px rgba(0,201,167,.2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,201,167,.4)}50%{box-shadow:0 0 0 6px rgba(0,201,167,.0)}}
+
+/* CONTAINER */
+.wrap{max-width:1300px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+
+/* HERO */
+.hero{padding:72px 0 80px;display:grid;grid-template-columns:1.5fr 1fr;gap:80px;align-items:center;border-bottom:1px solid var(--border)}
+.hero-eyebrow{font-size:10.5px;font-weight:600;letter-spacing:3px;color:var(--teal);text-transform:uppercase;margin-bottom:22px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--teal)}
+.hero h1{font-family:var(--f-head);font-size:58px;line-height:1.08;letter-spacing:-1.5px;margin-bottom:22px}
+.hero h1 em{font-style:italic;color:var(--teal)}
+.hero-sub{font-size:16px;color:var(--text2);line-height:1.65;max-width:520px}
+.hero-stats{display:flex;flex-direction:column;gap:12px}
+.hero-stat{background:var(--card);border:1px solid var(--border2);border-radius:var(--r-lg);padding:22px 24px;position:relative;overflow:hidden;cursor:default;transition:border-color .25s,transform .25s}
+.hero-stat:hover{border-color:var(--teal-d);transform:translateX(4px)}
+.hero-stat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px 0 0 2px}
+.hero-stat:nth-child(1)::before{background:var(--teal)}
+.hero-stat:nth-child(2)::before{background:var(--amber)}
+.hero-stat:nth-child(3)::before{background:var(--rose)}
+.hs-val{font-family:var(--f-head);font-size:44px;letter-spacing:-1.5px;line-height:1}
+.hs-label{font-size:12.5px;color:var(--text2);margin-top:5px}
+
+/* SECTION */
+.section{padding:72px 0;border-bottom:1px solid var(--border)}
+.section-head{margin-bottom:40px}
+.section-eyebrow{font-size:10px;font-weight:600;letter-spacing:3px;color:var(--teal);text-transform:uppercase;margin-bottom:12px}
+.section-head h2{font-family:var(--f-head);font-size:38px;letter-spacing:-0.8px;margin-bottom:8px}
+.section-head p{color:var(--text2);font-size:14.5px}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;transition:all .25s;cursor:default}
+.kpi-card:hover{border-color:var(--border2);background:var(--card2);transform:translateY(-2px)}
+.kpi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;gap:10px}
+.kpi-label{font-size:12px;color:var(--text2);font-weight:500;line-height:1.4}
+.kpi-badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;white-space:nowrap;flex-shrink:0}
+.kpi-badge.down{background:var(--red-soft);color:var(--red)}
+.kpi-badge.up{background:var(--green-soft);color:var(--green)}
+.kpi-badge.warn{background:var(--amber-soft);color:var(--amber)}
+.kpi-badge.info{background:var(--teal-soft);color:var(--teal)}
+.kpi-val{font-family:var(--f-head);font-size:40px;letter-spacing:-1px;line-height:1;margin-bottom:10px}
+.kpi-val .unit{font-size:20px;color:var(--text2)}
+.kpi-foot{font-size:12px;color:var(--text3)}
+.kpi-bar{height:5px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-top:14px}
+.kpi-fill{height:100%;border-radius:4px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.kpi-fill.teal{background:linear-gradient(90deg,var(--teal-d),var(--teal))}
+.kpi-fill.red{background:linear-gradient(90deg,#C53030,var(--red))}
+.kpi-fill.amber{background:linear-gradient(90deg,#C47A15,var(--amber))}
+
+/* PRODUCTS */
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+.prod-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px 20px;transition:all .25s;cursor:default}
+.prod-card:hover{border-color:var(--border2);transform:translateY(-3px)}
+.prod-card.hero-prod{grid-column:span 2;background:linear-gradient(140deg,rgba(0,143,118,.25) 0%,rgba(0,201,167,.08) 100%);border-color:var(--teal-d)}
+.prod-card.danger-prod{border-color:rgba(240,82,82,.3);background:rgba(240,82,82,.04)}
+.prod-rank{font-size:10px;color:var(--text3);letter-spacing:1.5px;font-weight:600;margin-bottom:6px}
+.prod-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.prod-name{font-family:var(--f-head);font-size:24px;letter-spacing:-0.3px}
+.hero-prod .prod-name{font-size:30px}
+.prod-tag{font-size:10.5px;padding:3px 10px;border-radius:20px;font-weight:600;white-space:nowrap}
+.tag-hot{background:rgba(245,166,35,.15);color:var(--amber)}
+.tag-alert{background:var(--red-soft);color:var(--red)}
+.tag-ok{background:var(--green-soft);color:var(--green)}
+.tag-warm{background:var(--rose-soft);color:var(--rose)}
+.prod-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.pn{display:flex;flex-direction:column;gap:2px}
+.pn-val{font-family:var(--f-head);font-size:20px;letter-spacing:-0.3px;line-height:1}
+.pn-lab{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px}
+.prod-bar{height:3px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-bottom:10px}
+.prod-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--teal-d),var(--teal))}
+.danger-prod .prod-fill{background:linear-gradient(90deg,#C53030,var(--red))}
+.prod-note{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* CHART */
+.chart-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:28px;margin-bottom:0}
+.chart-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.chart-top h3{font-family:var(--f-head);font-size:20px}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--text2)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+
+/* FUNNEL */
+.funnel{display:flex;flex-direction:column;gap:0;margin-bottom:28px}
+.f-step{margin:0 auto;width:var(--w);transition:width .5s}
+.f-bar{background:linear-gradient(90deg,var(--teal-d),rgba(0,201,167,.7));padding:18px 24px;border-radius:var(--r);display:flex;justify-content:space-between;align-items:center}
+.f-bar span{font-size:14px;font-weight:500}
+.f-bar b{font-family:var(--f-head);font-size:28px;letter-spacing:-0.5px}
+.f-step.success .f-bar{background:linear-gradient(90deg,rgba(74,222,128,.5),rgba(74,222,128,.3));border:1px solid rgba(74,222,128,.4)}
+.f-meta{text-align:center;font-size:12px;color:var(--text3);margin:6px 0 4px}
+.f-arrow{text-align:center;margin:8px 0;color:var(--text3);font-size:16px}
+.f-arrow em{font-size:11px;color:var(--red);margin-left:8px;font-style:normal;font-weight:500}
+.f-insight{background:var(--amber-soft);border:1px solid rgba(245,166,35,.2);border-radius:var(--r-lg);padding:24px 28px;display:flex;gap:18px;align-items:flex-start;margin-top:28px}
+.fi-icon{font-size:28px;line-height:1}
+.f-insight h4{font-family:var(--f-head);font-size:19px;margin-bottom:8px}
+.f-insight p{font-size:13.5px;color:var(--text2)}
+
+/* INSIGHTS */
+.insights-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.ins-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;position:relative;overflow:hidden;transition:transform .25s}
+.ins-card:hover{transform:translateY(-3px)}
+.ins-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.ins-red::after{background:var(--red)}
+.ins-amber::after{background:var(--amber)}
+.ins-teal::after{background:var(--teal)}
+.ins-green::after{background:var(--green)}
+.ins-pct{font-family:var(--f-head);font-size:48px;letter-spacing:-2px;line-height:1;margin-bottom:10px}
+.ins-red .ins-pct{color:var(--red)}
+.ins-amber .ins-pct{color:var(--amber)}
+.ins-teal .ins-pct{color:var(--teal)}
+.ins-green .ins-pct{color:var(--green)}
+.ins-card h4{font-size:15px;font-weight:600;margin-bottom:8px}
+.ins-card p{font-size:12.5px;color:var(--text2);margin-bottom:14px;line-height:1.5}
+.ins-quote{font-style:italic;font-size:12px;color:var(--text3);padding:8px 12px;background:var(--bg3);border-left:2px solid var(--border2);border-radius:0 4px 4px 0;font-family:var(--f-head)}
+
+/* WORD CLOUD */
+.wcloud-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:32px;text-align:center}
+.wcloud-box h3{font-family:var(--f-head);font-size:20px;margin-bottom:24px}
+.wcloud{display:flex;flex-wrap:wrap;gap:16px 24px;justify-content:center;align-items:center}
+.wcloud span{font-family:var(--f-head);font-weight:400;cursor:default;transition:opacity .2s,transform .2s}
+.wcloud span:hover{opacity:.7;transform:scale(1.08)}
+.ww1{font-size:54px;color:var(--red)}
+.ww2{font-size:38px;color:var(--amber)}
+.ww3{font-size:28px;color:var(--teal)}
+.ww4{font-size:22px;color:var(--text)}
+.ww5{font-size:17px;color:var(--text2)}
+.ww6{font-size:14px;color:var(--text3)}
+
+/* ACTIONS */
+.actions-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.act-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;transition:all .25s}
+.act-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.act-priority{display:inline-block;font-size:10px;letter-spacing:1.5px;font-weight:600;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:14px}
+.p0 .act-priority{background:var(--red-soft);color:var(--red)}
+.p1 .act-priority{background:var(--amber-soft);color:var(--amber)}
+.p2 .act-priority{background:var(--teal-soft);color:var(--teal)}
+.act-card h3{font-family:var(--f-head);font-size:21px;letter-spacing:-0.3px;margin-bottom:14px}
+.act-card ul{padding-left:18px;font-size:13px;color:var(--text2)}
+.act-card ul li{margin-bottom:6px}
+.act-impact{font-size:12.5px;color:var(--green);font-weight:500;padding-top:14px;border-top:1px dashed var(--border)}
+.act-impact::before{content:'↑ '}
+
+/* BENCHMARKS */
+.bench-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.bench-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px}
+.bench-label{font-size:13px;color:var(--text2);font-weight:500;margin-bottom:18px}
+.bench-track{position:relative;height:38px;background:var(--bg3);border-radius:var(--r);overflow:visible;margin-bottom:12px}
+.bench-fill-bar{height:100%;border-radius:var(--r);display:flex;align-items:center;padding:0 14px;font-size:13px;font-weight:600}
+.bench-fill-bar.bad{background:linear-gradient(90deg,#9B1C1C,var(--red))}
+.bench-fill-bar.good{background:linear-gradient(90deg,#065F46,var(--green))}
+.bench-marker{position:absolute;top:-6px;bottom:-6px;width:2px;background:var(--text);border-radius:2px}
+.bench-marker-label{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:10px;background:var(--text);color:var(--bg);padding:2px 7px;border-radius:4px;white-space:nowrap;font-weight:500}
+.bench-note{font-size:12px;color:var(--text3)}
+
+/* FORECAST */
+.forecast-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.fc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:28px;text-align:center;transition:all .25s}
+.fc-card:hover{transform:translateY(-3px)}
+.fc-tag{font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:16px}
+.fc-bad .fc-tag{background:var(--red-soft);color:var(--red)}
+.fc-mid .fc-tag{background:var(--bg3);color:var(--text2)}
+.fc-good .fc-tag{background:var(--green-soft);color:var(--green)}
+.fc-good{border-color:rgba(74,222,128,.25)}
+.fc-card h3{font-family:var(--f-head);font-size:60px;letter-spacing:-2.5px;line-height:1;margin-bottom:20px}
+.fc-bad h3{color:var(--red)}
+.fc-good h3{color:var(--green)}
+.fc-card ul{list-style:none;text-align:left;font-size:13px;color:var(--text2)}
+.fc-card ul li{padding:8px 0;border-bottom:1px solid var(--border)}
+.fc-card ul li:last-child{border:none}
+
+/* DATA SOURCE */
+.ds-card{background:linear-gradient(135deg,rgba(0,143,118,.2),rgba(0,201,167,.08));border:1px solid var(--teal-d);border-radius:var(--r-lg);padding:36px 40px;display:flex;gap:28px;align-items:flex-start}
+.ds-icon{font-size:44px;line-height:1}
+.ds-content h3{font-family:var(--f-head);font-size:24px;margin-bottom:8px}
+.ds-content > p{font-size:14px;color:var(--text2);margin-bottom:24px}
+.pipeline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pipe-step{background:var(--teal-soft);border:1px solid var(--teal-d);padding:8px 14px;border-radius:var(--r);font-size:12.5px;font-weight:500;display:flex;align-items:center;gap:8px}
+.pipe-num{width:20px;height:20px;border-radius:50%;background:var(--teal-d);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700;flex-shrink:0}
+.pipe-arrow{color:var(--text3);font-size:18px}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--border);padding:32px 0;background:var(--bg)}
+.footer-inner{max-width:1300px;margin:0 auto;padding:0 32px;display:flex;justify-content:space-between;align-items:center;gap:24px}
+.footer-brand{display:flex;align-items:center;gap:10px}
+.footer-brand .mini-logo{width:28px;height:28px;border-radius:7px;background:var(--teal);display:grid;place-items:center;font-family:var(--f-head);font-size:14px;font-weight:700;color:#0D1117}
+.footer-brand span{font-size:13px;color:var(--text2)}
+.footer-note{font-size:11px;color:var(--text3);margin-top:6px}
+.footer-meta{text-align:right;font-size:11px;color:var(--text3);line-height:2}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.animate{animation:fadeUp .6s ease-out backwards}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .hero{grid-template-columns:1fr;gap:40px;padding:48px 0 56px}
+  .hero h1{font-size:44px}
+  .hero-stats{grid-template-columns:repeat(3,1fr);display:grid}
+  .kpi-grid,.bench-grid,.forecast-grid{grid-template-columns:repeat(2,1fr)}
+  .products-grid{grid-template-columns:repeat(2,1fr)}
+  .prod-card.hero-prod{grid-column:span 2}
+  .insights-grid{grid-template-columns:repeat(2,1fr)}
+  .actions-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:720px){
+  .wrap{padding:0 18px}
+  .topbar-inner{padding:0 18px}
+  .topnav{display:none}
+  .hero h1{font-size:34px;letter-spacing:-1px}
+  .kpi-grid,.bench-grid,.forecast-grid,.insights-grid,.actions-grid{grid-template-columns:1fr}
+  .products-grid{grid-template-columns:1fr}
+  .prod-card.hero-prod{grid-column:span 1}
+  .section-head h2{font-size:28px}
+  .ds-card{flex-direction:column;padding:24px}
+  .pipeline{flex-direction:column;align-items:flex-start}
+  .pipe-arrow{transform:rotate(90deg)}
+  .footer-inner{flex-direction:column;align-items:flex-start}
+  .footer-meta{text-align:left}
+}
+</style>
 </head>
 <body>
 
@@ -18,9 +287,9 @@
   <div class="topbar-inner">
     <div class="brand">
       <div class="brand-logo">N</div>
-      <div class="brand-text">
-        <span class="brand-name">Neoflam</span>
-        <span class="brand-region">Uzbekistan · Sales Intelligence</span>
+      <div>
+        <div class="brand-name">Neoflam</div>
+        <div class="brand-sub">Uzbekistan · Sales Intelligence</div>
       </div>
     </div>
     <nav class="topnav">
@@ -30,508 +299,676 @@
       <a href="#insights">Инсайты</a>
       <a href="#actions">Действия</a>
     </nav>
-    <div class="period-pill">
-      <span class="dot"></span>
-      <span>Период: 10 дней</span>
+    <div class="live-pill">
+      <span class="live-dot"></span>
+      <span>10 дней · актив.</span>
     </div>
   </div>
 </header>
 
-<main class="container">
+<main>
 
   <!-- HERO -->
-  <section class="hero">
-    <div class="hero-text">
-      <p class="hero-eyebrow">SALES INTELLIGENCE · KPI OVERVIEW</p>
-      <h1>Каждый запрос клиента — <em>сигнал</em>.<br/>Каждый сигнал — <em>возможность</em>.</h1>
-      <p class="hero-sub">Внутренний аналитический контур филиала Neoflam в Узбекистане. Дашборд превращает сырые диалоги из Instagram и магазина в стратегические решения.</p>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-value" data-counter="317">0</div>
-        <div class="hero-stat-label">Запросов клиентов</div>
+  <div class="wrap">
+    <section class="hero">
+      <div>
+        <div class="hero-eyebrow">KPI Overview · Sales Intelligence</div>
+        <h1>Каждый запрос —&nbsp;<em>сигнал</em>.<br>Каждый сигнал —&nbsp;<em>возможность</em>.</h1>
+        <p class="hero-sub">Аналитический контур Neoflam Uzbekistan. Превращаем сырые диалоги из Instagram и магазина в стратегические решения.</p>
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-value" data-counter="3">0</div>
-        <div class="hero-stat-label">Реальных продаж</div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hs-val"><span data-counter="317">0</span></div>
+          <div class="hs-label">Запросов клиентов</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hs-val"><span data-counter="3">0</span></div>
+          <div class="hs-label">Реальных продаж</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hs-val">$<span data-counter="300">0</span></div>
+          <div class="hs-label">Выручка за период</div>
+        </div>
       </div>
-      <div class="hero-stat">
-        <div class="hero-stat-value">$<span data-counter="300">0</span></div>
-        <div class="hero-stat-label">Выручка</div>
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
-  <!-- KPI GRID -->
-  <section id="overview" class="kpi-grid">
-
-    <div class="kpi-card kpi-primary">
-      <div class="kpi-head">
-        <span class="kpi-label">Конверсия спрос → продажа</span>
-        <span class="kpi-trend down">▼</span>
+  <!-- KPI OVERVIEW -->
+  <div class="wrap">
+    <section class="section" id="overview">
+      <div class="section-head">
+        <div class="section-eyebrow">01 · Ключевые показатели</div>
+        <h2>Общий пульс продаж</h2>
+        <p>Главные метрики за 10 дней наблюдений</p>
       </div>
-      <div class="kpi-value">0.95<span class="kpi-unit">%</span></div>
-      <div class="kpi-foot">Бенчмарк по нише: 3-5%</div>
-      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:19%"></div></div>
-    </div>
+      <div class="kpi-grid">
 
-    <div class="kpi-card">
-      <div class="kpi-head">
-        <span class="kpi-label">Instagram</span>
-        <span class="kpi-pill">270 запросов</span>
+        <div class="kpi-card animate" style="animation-delay:.05s">
+          <div class="kpi-top">
+            <div class="kpi-label">Конверсия спрос → продажа</div>
+            <span class="kpi-badge down">▼ Ниже нормы</span>
+          </div>
+          <div class="kpi-val">0.95<span class="unit">%</span></div>
+          <div class="kpi-foot">Бенчмарк по нише: 3–5%. Отставание в 3–5×</div>
+          <div class="kpi-bar"><div class="kpi-fill red" style="width:19%"></div></div>
+        </div>
+
+        <div class="kpi-card animate" style="animation-delay:.1s">
+          <div class="kpi-top">
+            <div class="kpi-label">Instagram трафик</div>
+            <span class="kpi-badge info">270 запросов</span>
+          </div>
+          <div class="kpi-val">85<span class="unit">%</span></div>
+          <div class="kpi-foot">Главный канал. Конверсия выше, чем офлайн</div>
+          <div class="kpi-bar"><div class="kpi-fill teal" style="width:85%"></div></div>
+        </div>
+
+        <div class="kpi-card animate" style="animation-delay:.15s">
+          <div class="kpi-top">
+            <div class="kpi-label">Магазин (офлайн)</div>
+            <span class="kpi-badge warn">47 запросов</span>
+          </div>
+          <div class="kpi-val">15<span class="unit">%</span></div>
+          <div class="kpi-foot">0 продаж — срочно нужен скрипт продавцов</div>
+          <div class="kpi-bar"><div class="kpi-fill amber" style="width:15%"></div></div>
+        </div>
+
+        <div class="kpi-card animate" style="animation-delay:.2s">
+          <div class="kpi-top">
+            <div class="kpi-label">Средний чек</div>
+            <span class="kpi-badge up">↑ Выше рынка</span>
+          </div>
+          <div class="kpi-val">$150</div>
+          <div class="kpi-foot">По двум зафиксированным сделкам. Рынок ~$100</div>
+        </div>
+
+        <div class="kpi-card animate" style="animation-delay:.25s">
+          <div class="kpi-top">
+            <div class="kpi-label">«Дорого» — главное возражение</div>
+            <span class="kpi-badge down">⚠ Критично</span>
+          </div>
+          <div class="kpi-val">134<span class="unit">/317</span></div>
+          <div class="kpi-foot">42% клиентов уходят только из-за цены</div>
+          <div class="kpi-bar"><div class="kpi-fill red" style="width:42%"></div></div>
+        </div>
+
+        <div class="kpi-card animate" style="animation-delay:.3s">
+          <div class="kpi-top">
+            <div class="kpi-label">Потенциал в воронке</div>
+            <span class="kpi-badge up">▲ Догрев</span>
+          </div>
+          <div class="kpi-val">$2,400</div>
+          <div class="kpi-foot">«Отложенные» клиенты, готовые к покупке</div>
+          <div class="kpi-bar"><div class="kpi-fill teal" style="width:70%"></div></div>
+        </div>
+
       </div>
-      <div class="kpi-value">85<span class="kpi-unit">% траф.</span></div>
-      <div class="kpi-foot">Главный канал привлечения</div>
-    </div>
-
-    <div class="kpi-card">
-      <div class="kpi-head">
-        <span class="kpi-label">Магазин (офлайн)</span>
-        <span class="kpi-pill">47 запросов</span>
-      </div>
-      <div class="kpi-value">15<span class="kpi-unit">% траф.</span></div>
-      <div class="kpi-foot">0 продаж — нужен скрипт</div>
-    </div>
-
-    <div class="kpi-card">
-      <div class="kpi-head">
-        <span class="kpi-label">Средний чек</span>
-        <span class="kpi-trend">—</span>
-      </div>
-      <div class="kpi-value">$150</div>
-      <div class="kpi-foot">По двум зафиксированным сделкам</div>
-    </div>
-
-    <div class="kpi-card kpi-warning">
-      <div class="kpi-head">
-        <span class="kpi-label">«Дорого» — главное возражение</span>
-        <span class="kpi-trend down">⚠</span>
-      </div>
-      <div class="kpi-value">134<span class="kpi-unit">/317</span></div>
-      <div class="kpi-foot">42% клиентов уходят из-за цены</div>
-      <div class="kpi-bar warning"><div class="kpi-bar-fill" style="width:42%"></div></div>
-    </div>
-
-    <div class="kpi-card kpi-good">
-      <div class="kpi-head">
-        <span class="kpi-label">Потенциал в воронке</span>
-        <span class="kpi-trend up">▲</span>
-      </div>
-      <div class="kpi-value">$<span class="counter-anim">2,400</span></div>
-      <div class="kpi-foot">Потенциал догрева «отложенных»</div>
-    </div>
-
-  </section>
+    </section>
+  </div>
 
   <!-- PRODUCTS -->
-  <section id="products" class="block">
-    <div class="block-head">
-      <h2><span class="num">01</span> Товары — спрос и конверсия</h2>
-      <p>Что хочет рынок и где утечка прибыли</p>
-    </div>
-
-    <div class="products-grid">
-      <!-- Top items -->
-      <div class="product-card hero-product">
-        <div class="product-rank">#1</div>
-        <div class="product-header">
-          <h3>Fika4</h3>
-          <span class="product-badge badge-hot">🔥 Хит</span>
-        </div>
-        <div class="product-stats">
-          <div><span class="ps-num">151</span><span class="ps-l">запросов</span></div>
-          <div><span class="ps-num">2</span><span class="ps-l">продажи</span></div>
-          <div><span class="ps-num">1.3%</span><span class="ps-l">конверсия</span></div>
-        </div>
-        <div class="product-bar"><div class="product-bar-fill" style="width:100%"></div></div>
-        <p class="product-note">Серия Fika — скандинавский дизайн с деревянной ручкой. Ядро спроса. Усилить контентом.</p>
+  <div class="wrap">
+    <section class="section" id="products">
+      <div class="section-head">
+        <div class="section-eyebrow">02 · Товары</div>
+        <h2>Спрос и конверсия</h2>
+        <p>Что хочет рынок и где утечка прибыли</p>
       </div>
 
-      <div class="product-card warning-product">
-        <div class="product-rank">#2</div>
-        <div class="product-header">
-          <h3>Bebe</h3>
-          <span class="product-badge badge-alert">⚠ 0 продаж</span>
+      <div class="products-grid">
+        <div class="prod-card hero-prod animate" style="animation-delay:.05s">
+          <div class="prod-rank">#1</div>
+          <div class="prod-title-row">
+            <div class="prod-name">Fika4</div>
+            <span class="prod-tag tag-hot">🔥 Хит</span>
+          </div>
+          <div class="prod-nums">
+            <div class="pn"><span class="pn-val">151</span><span class="pn-lab">запросов</span></div>
+            <div class="pn"><span class="pn-val">2</span><span class="pn-lab">продажи</span></div>
+            <div class="pn"><span class="pn-val">1.3%</span><span class="pn-lab">конверсия</span></div>
+          </div>
+          <div class="prod-bar"><div class="prod-fill" style="width:100%"></div></div>
+          <p class="prod-note">Серия Fika — скандинавский дизайн с деревянной ручкой. Ядро спроса. Усилить контентом и рилсами.</p>
         </div>
-        <div class="product-stats">
-          <div><span class="ps-num">88</span><span class="ps-l">запросов</span></div>
-          <div><span class="ps-num">0</span><span class="ps-l">продаж</span></div>
-          <div><span class="ps-num">0%</span><span class="ps-l">конверсия</span></div>
+
+        <div class="prod-card danger-prod animate" style="animation-delay:.1s">
+          <div class="prod-rank">#2</div>
+          <div class="prod-title-row">
+            <div class="prod-name">Bebe</div>
+            <span class="prod-tag tag-alert">⚠ 0 продаж</span>
+          </div>
+          <div class="prod-nums">
+            <div class="pn"><span class="pn-val">88</span><span class="pn-lab">запросов</span></div>
+            <div class="pn"><span class="pn-val">0</span><span class="pn-lab">продаж</span></div>
+            <div class="pn"><span class="pn-val">0%</span><span class="pn-lab">конверсия</span></div>
+          </div>
+          <div class="prod-bar"><div class="prod-fill" style="width:58%"></div></div>
+          <p class="prod-note">Огромный интерес, все останавливает цена. Нужен фокус на PFOA-free сертификацию.</p>
         </div>
-        <div class="product-bar"><div class="product-bar-fill" style="width:58%"></div></div>
-        <p class="product-note">Огромный интерес, но всех останавливает цена. Серия для детей — нужен фокус на безопасности (PFOA-free, эко-керамика).</p>
+
+        <div class="prod-card animate" style="animation-delay:.15s">
+          <div class="prod-rank">#3</div>
+          <div class="prod-title-row"><div class="prod-name">Fika6</div><span class="prod-tag tag-ok">✓ Конверт.</span></div>
+          <div class="prod-nums">
+            <div class="pn"><span class="pn-val">23</span><span class="pn-lab">запросов</span></div>
+            <div class="pn"><span class="pn-val">1</span><span class="pn-lab">продажа</span></div>
+            <div class="pn"><span class="pn-val">4.3%</span><span class="pn-lab">конверсия</span></div>
+          </div>
+          <div class="prod-bar"><div class="prod-fill" style="width:15%"></div></div>
+        </div>
+
+        <div class="prod-card animate" style="animation-delay:.2s">
+          <div class="prod-rank">#4</div>
+          <div class="prod-title-row"><div class="prod-name">Vakuum</div><span class="prod-tag tag-alert">⚠ 0%</span></div>
+          <div class="prod-nums">
+            <div class="pn"><span class="pn-val">23</span><span class="pn-lab">запросов</span></div>
+            <div class="pn"><span class="pn-val">0</span><span class="pn-lab">продаж</span></div>
+            <div class="pn"><span class="pn-val">0%</span><span class="pn-lab">конверсия</span></div>
+          </div>
+          <div class="prod-bar"><div class="prod-fill" style="width:15%"></div></div>
+        </div>
+
+        <div class="prod-card animate" style="animation-delay:.25s">
+          <div class="prod-rank">#5</div>
+          <div class="prod-title-row"><div class="prod-name">Blinnitsa</div><span class="prod-tag tag-alert">⚠</span></div>
+          <div class="prod-nums">
+            <div class="pn"><span class="pn-val">15</span><span class="pn-lab">запросов</span></div>
+            <div class="pn"><span class="pn-val">0</span><span class="pn-lab">продаж</span></div>
+            <div class="pn"><span class="pn-val">0%</span><span class="pn-lab">конверсия</span></div>
+          </div>
+          <div class="prod-bar"><div class="prod-fill" style="width:10%"></div></div>
+        </div>
+
+        <div class="prod-card animate" style="animation-delay:.3s">
+          <div class="prod-rank">#6</div>
+          <div class="prod-title-row"><div class="prod-name">Bein</div><span class="prod-tag" style="color:var(--text3)">Низкий</span></div>
+          <div class="prod-nums">
+            <div class="pn"><span class="pn-val">8</span><span class="pn-lab">запросов</span></div>
+            <div class="pn"><span class="pn-val">0</span><span class="pn-lab">продаж</span></div>
+            <div class="pn"><span class="pn-val">0%</span><span class="pn-lab">конверсия</span></div>
+          </div>
+          <div class="prod-bar"><div class="prod-fill" style="width:5%"></div></div>
+        </div>
+
+        <div class="prod-card animate" style="animation-delay:.35s">
+          <div class="prod-rank">#7</div>
+          <div class="prod-title-row"><div class="prod-name">Qozon</div><span class="prod-tag tag-warm">⏳ Ждут</span></div>
+          <div class="prod-nums">
+            <div class="pn"><span class="pn-val">8</span><span class="pn-lab">запросов</span></div>
+            <div class="pn"><span class="pn-val">0</span><span class="pn-lab">продаж</span></div>
+            <div class="pn"><span class="pn-val">0%</span><span class="pn-lab">конверсия</span></div>
+          </div>
+          <div class="prod-bar"><div class="prod-fill" style="width:5%"></div></div>
+          <p class="prod-note">CRM-кандидаты — сказали «куплю позже»</p>
+        </div>
+
+        <div class="prod-card animate" style="animation-delay:.4s">
+          <div class="prod-rank">#8</div>
+          <div class="prod-title-row"><div class="prod-name">Sherbet</div><span class="prod-tag" style="color:var(--text3)">Минимум</span></div>
+          <div class="prod-nums">
+            <div class="pn"><span class="pn-val">1</span><span class="pn-lab">запрос</span></div>
+            <div class="pn"><span class="pn-val">0</span><span class="pn-lab">продаж</span></div>
+            <div class="pn"><span class="pn-val">0%</span><span class="pn-lab">конверсия</span></div>
+          </div>
+          <div class="prod-bar"><div class="prod-fill" style="width:1%"></div></div>
+        </div>
       </div>
 
-      <div class="product-card">
-        <div class="product-rank">#3</div>
-        <div class="product-header"><h3>Fika6</h3><span class="product-badge badge-ok">✓</span></div>
-        <div class="product-stats">
-          <div><span class="ps-num">23</span><span class="ps-l">запросов</span></div>
-          <div><span class="ps-num">1</span><span class="ps-l">продажа $300</span></div>
-          <div><span class="ps-num">4.3%</span><span class="ps-l">конверсия</span></div>
+      <div class="chart-box">
+        <div class="chart-top">
+          <h3>Распределение спроса по товарам</h3>
+          <div class="legend">
+            <span><i style="background:var(--teal)"></i>Запросы</span>
+            <span><i style="background:var(--amber)"></i>Продажи</span>
+          </div>
         </div>
-        <div class="product-bar"><div class="product-bar-fill" style="width:15%"></div></div>
+        <canvas id="productsChart" height="120"></canvas>
       </div>
-
-      <div class="product-card">
-        <div class="product-rank">#4</div>
-        <div class="product-header"><h3>Vakuum nabor</h3><span class="product-badge badge-alert">⚠</span></div>
-        <div class="product-stats">
-          <div><span class="ps-num">23</span><span class="ps-l">запросов</span></div>
-          <div><span class="ps-num">0</span><span class="ps-l">продаж</span></div>
-          <div><span class="ps-num">0%</span><span class="ps-l">конверсия</span></div>
-        </div>
-        <div class="product-bar"><div class="product-bar-fill" style="width:15%"></div></div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-rank">#5</div>
-        <div class="product-header"><h3>Blinnitsa</h3><span class="product-badge badge-alert">⚠</span></div>
-        <div class="product-stats">
-          <div><span class="ps-num">15</span><span class="ps-l">запросов</span></div>
-          <div><span class="ps-num">0</span><span class="ps-l">продаж</span></div>
-          <div><span class="ps-num">0%</span><span class="ps-l">конверсия</span></div>
-        </div>
-        <div class="product-bar"><div class="product-bar-fill" style="width:10%"></div></div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-rank">#6</div>
-        <div class="product-header"><h3>Bein</h3><span class="product-badge">·</span></div>
-        <div class="product-stats">
-          <div><span class="ps-num">8</span><span class="ps-l">запросов</span></div>
-          <div><span class="ps-num">0</span><span class="ps-l">продаж</span></div>
-          <div><span class="ps-num">0%</span><span class="ps-l">конверсия</span></div>
-        </div>
-        <div class="product-bar"><div class="product-bar-fill" style="width:5%"></div></div>
-      </div>
-
-      <div class="product-card">
-        <div class="product-rank">#7</div>
-        <div class="product-header"><h3>Qozon</h3><span class="product-badge badge-warm">⏳</span></div>
-        <div class="product-stats">
-          <div><span class="ps-num">8</span><span class="ps-l">запросов</span></div>
-          <div><span class="ps-num">0</span><span class="ps-l">продаж</span></div>
-          <div><span class="ps-num">0%</span><span class="ps-l">конверсия</span></div>
-        </div>
-        <div class="product-bar"><div class="product-bar-fill" style="width:5%"></div></div>
-        <p class="product-note">Часть клиентов сказала «куплю позже» — кандидаты для CRM-догрева.</p>
-      </div>
-
-      <div class="product-card">
-        <div class="product-rank">#8</div>
-        <div class="product-header"><h3>Sherbet</h3><span class="product-badge">·</span></div>
-        <div class="product-stats">
-          <div><span class="ps-num">1</span><span class="ps-l">запрос</span></div>
-          <div><span class="ps-num">0</span><span class="ps-l">продаж</span></div>
-          <div><span class="ps-num">0%</span><span class="ps-l">конверсия</span></div>
-        </div>
-        <div class="product-bar"><div class="product-bar-fill" style="width:1%"></div></div>
-      </div>
-    </div>
-
-    <!-- Chart -->
-    <div class="chart-wrap">
-      <div class="chart-head">
-        <h3>Распределение спроса по товарам</h3>
-        <div class="chart-legend">
-          <span><i style="background:#2C5F5D"></i>Запросы</span>
-          <span><i style="background:#E8A87C"></i>Продажи</span>
-        </div>
-      </div>
-      <canvas id="productsChart" height="120"></canvas>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <!-- FUNNEL -->
-  <section id="funnel" class="block">
-    <div class="block-head">
-      <h2><span class="num">02</span> Воронка — где утекают клиенты</h2>
-      <p>Каждый этап показывает, сколько людей доходит до следующего шага</p>
-    </div>
-
-    <div class="funnel">
-      <div class="funnel-step" style="--w:100%">
-        <div class="funnel-bar"><span>Запросы</span><b>317</b></div>
-        <div class="funnel-meta">100% · все клиенты, кто написал/пришёл</div>
+  <div class="wrap">
+    <section class="section" id="funnel">
+      <div class="section-head">
+        <div class="section-eyebrow">03 · Воронка</div>
+        <h2>Где утекают клиенты</h2>
+        <p>Каждый этап показывает, сколько людей доходит до следующего шага</p>
       </div>
-      <div class="funnel-arrow">↓ <span>−42% уходят на «дорого»</span></div>
 
-      <div class="funnel-step" style="--w:58%">
-        <div class="funnel-bar"><span>Узнали инфо + цену</span><b>183</b></div>
-        <div class="funnel-meta">58% · получили подробную инфо</div>
+      <div class="funnel">
+        <div class="f-step" style="--w:100%">
+          <div class="f-bar"><span>Запросы</span><b>317</b></div>
+          <div class="f-meta">100% · все клиенты, кто написал или пришёл</div>
+        </div>
+        <div class="f-arrow">↓ <em>−42% уходят на «дорого»</em></div>
+        <div class="f-step" style="--w:58%">
+          <div class="f-bar"><span>Узнали инфо + цену</span><b>183</b></div>
+          <div class="f-meta">58% · получили подробную информацию</div>
+        </div>
+        <div class="f-arrow">↓ <em>−87% не получили оффер</em></div>
+        <div class="f-step" style="--w:8%">
+          <div class="f-bar"><span>Готовы к покупке</span><b>24</b></div>
+          <div class="f-meta">7.5% · «куплю позже» или спрашивают доставку</div>
+        </div>
+        <div class="f-arrow">↓ <em>−87% теряются без напоминания</em></div>
+        <div class="f-step success" style="--w:4%">
+          <div class="f-bar"><span>Купили</span><b>3</b></div>
+          <div class="f-meta">0.95% · итоговая конверсия</div>
+        </div>
       </div>
-      <div class="funnel-arrow">↓ <span>−87% не получили оффер</span></div>
 
-      <div class="funnel-step" style="--w:8%">
-        <div class="funnel-bar"><span>Готовы к покупке</span><b>24</b></div>
-        <div class="funnel-meta">7.5% · «куплю позже» / задают вопросы по доставке</div>
+      <div class="f-insight">
+        <div class="fi-icon">💡</div>
+        <div>
+          <h4>Главная утечка — между «узнали цену» и «решили купить»</h4>
+          <p>134 клиента ушли просто услышав цену. Это значит ценность товара не была донесена ДО озвучивания цены. Решение — переработка скриптов: сначала эмоция и польза, потом цена.</p>
+        </div>
       </div>
-      <div class="funnel-arrow">↓ <span>−87% теряются без напоминания</span></div>
-
-      <div class="funnel-step success" style="--w:1%">
-        <div class="funnel-bar"><span>Купили</span><b>3</b></div>
-        <div class="funnel-meta">0.95% · итоговая конверсия</div>
-      </div>
-    </div>
-
-    <div class="funnel-insight">
-      <div class="insight-icon">💡</div>
-      <div>
-        <h4>Главная утечка — между «узнали цену» и «решили купить»</h4>
-        <p>134 клиента ушли просто услышав цену. Это значит ценность товара не была донесена ДО озвучивания цены. Решение — переработка контент-стратегии и скриптов: сначала эмоция и польза, потом цена.</p>
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <!-- INSIGHTS -->
-  <section id="insights" class="block">
-    <div class="block-head">
-      <h2><span class="num">03</span> Голос клиента</h2>
-      <p>Что реально говорят люди — главные паттерны</p>
-    </div>
-
-    <div class="insights-grid">
-      <div class="insight-card insight-red">
-        <div class="insight-percent">42%</div>
-        <h4>«Дорого»</h4>
-        <p>Самое частое возражение. Особенно сильно в категории Bebe (детская посуда) и Vakuum (вакуумные наборы).</p>
-        <div class="insight-quote">— Просили цену, цена оказалась дорогой</div>
+  <div class="wrap">
+    <section class="section" id="insights">
+      <div class="section-head">
+        <div class="section-eyebrow">04 · Голос клиента</div>
+        <h2>Что реально говорят люди</h2>
+        <p>Главные паттерны из диалогов</p>
       </div>
 
-      <div class="insight-card insight-amber">
-        <div class="insight-percent">7.5%</div>
-        <h4>«Куплю позже»</h4>
-        <p>Клиенты заинтересованы, но откладывают решение. Без CRM-напоминания 90% из них теряются.</p>
-        <div class="insight-quote">— Некоторые сказали, что позже купят</div>
+      <div class="insights-grid">
+        <div class="ins-card ins-red animate">
+          <div class="ins-pct">42%</div>
+          <h4>«Дорого»</h4>
+          <p>Самое частое возражение. Особенно сильно в категориях Bebe и Vakuum.</p>
+          <div class="ins-quote">— Просили цену, цена оказалась дорогой</div>
+        </div>
+        <div class="ins-card ins-amber animate" style="animation-delay:.1s">
+          <div class="ins-pct">7.5%</div>
+          <h4>«Куплю позже»</h4>
+          <p>Заинтересованы, но откладывают. Без CRM-напоминания 90% теряются.</p>
+          <div class="ins-quote">— Некоторые сказали, что позже купят</div>
+        </div>
+        <div class="ins-card ins-teal animate" style="animation-delay:.15s">
+          <div class="ins-pct">58%</div>
+          <h4>«Инфо + цена»</h4>
+          <p>Большинство хотят детали до покупки. Контент должен закрывать вопросы заранее.</p>
+          <div class="ins-quote">— Просили инфо о товаре и цену</div>
+        </div>
+        <div class="ins-card ins-green animate" style="animation-delay:.2s">
+          <div class="ins-pct">0.95%</div>
+          <h4>«Беру»</h4>
+          <p>Те, кто доходит — берут уверенно. Fika лидер. Вопрос в количестве доходящих.</p>
+          <div class="ins-quote">— Понравилось качество и дизайн</div>
+        </div>
       </div>
 
-      <div class="insight-card insight-blue">
-        <div class="insight-percent">58%</div>
-        <h4>«Инфо + цена»</h4>
-        <p>Большинство хотят детальную информацию о товаре до покупки. Сигнал: контент должен закрывать вопросы заранее.</p>
-        <div class="insight-quote">— Просили инфо о товаре и цену</div>
+      <div class="wcloud-box">
+        <h3>Частые слова в диалогах с клиентами</h3>
+        <div class="wcloud">
+          <span class="ww1">дорого</span>
+          <span class="ww2">цена</span>
+          <span class="ww2">позже</span>
+          <span class="ww3">красиво</span>
+          <span class="ww3">безопасно</span>
+          <span class="ww3">подумаю</span>
+          <span class="ww4">оригинал</span>
+          <span class="ww4">керамика</span>
+          <span class="ww4">скидка</span>
+          <span class="ww4">рассрочка</span>
+          <span class="ww5">дети</span>
+          <span class="ww5">подарок</span>
+          <span class="ww6">качество</span>
+          <span class="ww6">доставка</span>
+        </div>
       </div>
-
-      <div class="insight-card insight-green">
-        <div class="insight-percent">0.95%</div>
-        <h4>«Беру»</h4>
-        <p>Те, кто доходит до покупки — берут уверенно. Серия Fika лидер. Вопрос только в количестве доходящих.</p>
-        <div class="insight-quote">— Понравилось качество и дизайн</div>
-      </div>
-    </div>
-
-    <!-- Word cloud / common words -->
-    <div class="words-block">
-      <h3>Частые слова в комментариях клиентов</h3>
-      <div class="word-cloud">
-        <span class="w-xl">дорого</span>
-        <span class="w-l">цена</span>
-        <span class="w-l">позже</span>
-        <span class="w-m">красиво</span>
-        <span class="w-m">безопасно</span>
-        <span class="w-m">подумаю</span>
-        <span class="w-s">оригинал</span>
-        <span class="w-s">керамика</span>
-        <span class="w-s">скидка</span>
-        <span class="w-s">рассрочка</span>
-        <span class="w-xs">дети</span>
-        <span class="w-xs">подарок</span>
-        <span class="w-xs">качество</span>
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <!-- ACTIONS -->
-  <section id="actions" class="block">
-    <div class="block-head">
-      <h2><span class="num">04</span> План действий</h2>
-      <p>Что делать на следующие 30 дней — приоритеты</p>
-    </div>
-
-    <div class="actions-grid">
-      <div class="action-card priority-high">
-        <div class="action-priority">P0 · Срочно</div>
-        <h3>Отработка возражения «дорого»</h3>
-        <ul>
-          <li>Внедрить рассрочку 6/12/24 мес</li>
-          <li>Подсветить срок службы (10+ лет) — стоимость в день</li>
-          <li>Бандлы: Fika4 + Fika6 = −15%</li>
-        </ul>
-        <div class="action-impact">📈 Потенциал: +30-50% конверсия</div>
+  <div class="wrap">
+    <section class="section" id="actions">
+      <div class="section-head">
+        <div class="section-eyebrow">05 · Действия</div>
+        <h2>План на 30 дней</h2>
+        <p>Приоритизированный список задач для роста конверсии</p>
       </div>
 
-      <div class="action-card priority-high">
-        <div class="action-priority">P0 · Срочно</div>
-        <h3>Реанимация Bebe (детская посуда)</h3>
-        <ul>
-          <li>Серия рилсов о безопасности (PFOA/PTFE-free)</li>
-          <li>UGC от мам-блогеров Узбекистана</li>
-          <li>Сертификаты безопасности в карточке</li>
-        </ul>
-        <div class="action-impact">📈 88 «горячих» клиентов в воронке</div>
-      </div>
-
-      <div class="action-card priority-mid">
-        <div class="action-priority">P1 · 2 недели</div>
-        <h3>CRM-догрев «отложенных»</h3>
-        <ul>
-          <li>База всех «куплю позже»</li>
-          <li>Касание через 3 / 7 / 14 дней</li>
-          <li>Спецоффер с дедлайном (FOMO)</li>
-        </ul>
-          <div class="action-impact">📈 До $2,400 в догреве</div>
-      </div>
-
-      <div class="action-card priority-mid">
-        <div class="action-priority">P1 · 2 недели</div>
-        <h3>Контент-воронка Instagram</h3>
-        <ul>
-          <li>5+ рилсов по Fika4 (рецепты, демо)</li>
-          <li>Сторис с «вопрос-ответ»</li>
-          <li>Цена показывается ПОСЛЕ ценности</li>
-        </ul>
-        <div class="action-impact">📈 Снижение «дорого»-возражений</div>
-      </div>
-
-      <div class="action-card priority-low">
-        <div class="action-priority">P2 · 1 месяц</div>
-        <h3>Скрипт офлайн-продаж</h3>
-        <ul>
-          <li>Обучение продавцов (2 часа)</li>
-          <li>Демонстрация качества «вживую»</li>
-          <li>Альтернатива из бюджетной линейки</li>
-        </ul>
-        <div class="action-impact">📈 47 запросов в магазине → ≥ 3-5 продаж</div>
-      </div>
-
-      <div class="action-card priority-low">
-        <div class="action-priority">P2 · 1 месяц</div>
-        <h3>A/B тест промо-механик</h3>
-        <ul>
-          <li>Скидка 10% vs подарок vs бесплатная доставка</li>
-          <li>Замер на 100 диалогах каждой</li>
-          <li>Масштабирование победителя</li>
-        </ul>
-        <div class="action-impact">📈 +Знание реальных триггеров</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- BENCHMARKS BLOCK -->
-  <section class="block benchmarks">
-    <div class="block-head">
-      <h2><span class="num">05</span> Бенчмарки рынка</h2>
-      <p>Где Neoflam UZ относительно индустрии</p>
-    </div>
-    <div class="bench-grid">
-      <div class="bench-card">
-        <div class="bench-label">Конверсия Instagram → продажа</div>
-        <div class="bench-bar">
-          <div class="bench-fill bad" style="width:25%"><span>1%</span></div>
-          <div class="bench-target" style="left:60%"><span>3-5% бенч</span></div>
+      <div class="actions-grid">
+        <div class="act-card p0 animate" style="animation-delay:.05s">
+          <div class="act-priority">P0 · Срочно</div>
+          <h3>Отработка «дорого»</h3>
+          <ul>
+            <li>Внедрить рассрочку 6/12/24 мес</li>
+            <li>Подсветить срок службы 10+ лет → цена в день</li>
+            <li>Бандлы: Fika4 + Fika6 = −15%</li>
+          </ul>
+          <div class="act-impact">Потенциал: +30–50% конверсии</div>
         </div>
-        <div class="bench-note">Ниже индустрии в 3-5 раз. Главная зона роста.</div>
-      </div>
-      <div class="bench-card">
-        <div class="bench-label">Доля «дорого» в возражениях</div>
-        <div class="bench-bar">
-          <div class="bench-fill bad" style="width:84%"><span>42%</span></div>
-          <div class="bench-target" style="left:50%"><span>20-25% бенч</span></div>
+
+        <div class="act-card p0 animate" style="animation-delay:.1s">
+          <div class="act-priority">P0 · Срочно</div>
+          <h3>Реанимация Bebe</h3>
+          <ul>
+            <li>Серия рилсов о безопасности (PFOA/PTFE-free)</li>
+            <li>UGC от мам-блогеров Узбекистана</li>
+            <li>Сертификаты в карточке товара</li>
+          </ul>
+          <div class="act-impact">88 горячих клиентов в воронке</div>
         </div>
-        <div class="bench-note">В 1.7× выше нормы. Проблема в позиционировании, не в цене.</div>
-      </div>
-      <div class="bench-card">
-        <div class="bench-label">Средний чек ($)</div>
-        <div class="bench-bar">
-          <div class="bench-fill good" style="width:75%"><span>$150</span></div>
-          <div class="bench-target" style="left:50%"><span>$100 бенч</span></div>
+
+        <div class="act-card p1 animate" style="animation-delay:.15s">
+          <div class="act-priority">P1 · 2 недели</div>
+          <h3>CRM-догрев</h3>
+          <ul>
+            <li>База всех «куплю позже»</li>
+            <li>Касание через 3 / 7 / 14 дней</li>
+            <li>Спецоффер с дедлайном (FOMO)</li>
+          </ul>
+          <div class="act-impact">До $2,400 в отложенном спросе</div>
         </div>
-        <div class="bench-note">Выше рынка в 1.5×. Премиум-позиционирование оправдано.</div>
+
+        <div class="act-card p1 animate" style="animation-delay:.2s">
+          <div class="act-priority">P1 · 2 недели</div>
+          <h3>Контент-воронка IG</h3>
+          <ul>
+            <li>5+ рилсов по Fika4 (рецепты, демо)</li>
+            <li>Сторис «вопрос-ответ» каждые 3 дня</li>
+            <li>Цена — только после демонстрации ценности</li>
+          </ul>
+          <div class="act-impact">Снижение «дорого»-возражений</div>
+        </div>
+
+        <div class="act-card p2 animate" style="animation-delay:.25s">
+          <div class="act-priority">P2 · 1 месяц</div>
+          <h3>Скрипт офлайн-продаж</h3>
+          <ul>
+            <li>Обучение продавцов (2 часа)</li>
+            <li>Демонстрация качества вживую</li>
+            <li>Альтернатива из бюджетной линейки</li>
+          </ul>
+          <div class="act-impact">47 запросов → 3–5 продаж</div>
+        </div>
+
+        <div class="act-card p2 animate" style="animation-delay:.3s">
+          <div class="act-priority">P2 · 1 месяц</div>
+          <h3>A/B тест промо</h3>
+          <ul>
+            <li>Скидка 10% vs подарок vs бесплатная доставка</li>
+            <li>Замер на 100 диалогах каждой</li>
+            <li>Масштабирование победителя</li>
+          </ul>
+          <div class="act-impact">Знание реальных триггеров покупки</div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
+
+  <!-- BENCHMARKS -->
+  <div class="wrap">
+    <section class="section">
+      <div class="section-head">
+        <div class="section-eyebrow">06 · Бенчмарки</div>
+        <h2>Neoflam UZ vs рынок</h2>
+        <p>Где мы сейчас относительно индустрии</p>
+      </div>
+      <div class="bench-grid">
+        <div class="bench-card">
+          <div class="bench-label">Конверсия Instagram → продажа</div>
+          <div class="bench-track">
+            <div class="bench-fill-bar bad" style="width:25%"><span style="color:#fff">1%</span></div>
+            <div class="bench-marker" style="left:60%"><span class="bench-marker-label">3–5% бенч</span></div>
+          </div>
+          <div class="bench-note">Ниже индустрии в 3–5 раз. Главная зона роста.</div>
+        </div>
+        <div class="bench-card">
+          <div class="bench-label">Доля «дорого» в возражениях</div>
+          <div class="bench-track">
+            <div class="bench-fill-bar bad" style="width:84%"><span style="color:#fff">42%</span></div>
+            <div class="bench-marker" style="left:50%"><span class="bench-marker-label">20–25% бенч</span></div>
+          </div>
+          <div class="bench-note">В 1.7× выше нормы. Проблема в позиционировании, не в цене.</div>
+        </div>
+        <div class="bench-card">
+          <div class="bench-label">Средний чек ($)</div>
+          <div class="bench-track">
+            <div class="bench-fill-bar good" style="width:75%"><span style="color:#fff">$150</span></div>
+            <div class="bench-marker" style="left:50%"><span class="bench-marker-label">$100 бенч</span></div>
+          </div>
+          <div class="bench-note">Выше рынка в 1.5×. Премиум-позиционирование оправдано.</div>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <!-- FORECAST -->
-  <section class="block forecast">
-    <div class="block-head">
-      <h2><span class="num">06</span> Прогноз — следующие 30 дней</h2>
-      <p>Три сценария на основе текущей динамики</p>
-    </div>
-    <div class="forecast-grid">
-      <div class="forecast-card scenario-bad">
-        <div class="scenario-tag">Пессимистичный</div>
-        <h3>−10%</h3>
-        <ul>
-          <li>Если ничего не менять</li>
-          <li>~285 запросов</li>
-          <li>~3 продажи</li>
-          <li>~$270 выручки</li>
-        </ul>
+  <div class="wrap">
+    <section class="section">
+      <div class="section-head">
+        <div class="section-eyebrow">07 · Прогноз</div>
+        <h2>Следующие 30 дней</h2>
+        <p>Три сценария на основе текущей динамики</p>
       </div>
-      <div class="forecast-card scenario-mid">
-        <div class="scenario-tag">Базовый</div>
-        <h3>×1.0</h3>
-        <ul>
-          <li>Сохранение динамики</li>
-          <li>~317 запросов</li>
-          <li>~3 продажи</li>
-          <li>~$300 выручки</li>
-        </ul>
-      </div>
-      <div class="forecast-card scenario-good">
-        <div class="scenario-tag">Оптимистичный</div>
-        <h3>×3.5</h3>
-        <ul>
-          <li>С внедрением P0-действий</li>
-          <li>~400+ запросов</li>
-          <li>~10-12 продаж</li>
-          <li>~$1,500-2,000 выручки</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- DATA SOURCE -->
-  <section class="block data-source">
-    <div class="ds-card">
-      <div class="ds-icon">📊</div>
-      <div class="ds-content">
-        <h3>Источник данных</h3>
-        <p>Этот дашборд работает на данных, которые менеджер вводит через Google-форму после каждого диалога с клиентом. Когда придут разбивки по дням — сюда добавится живая динамика и графики week-over-week.</p>
-        <div class="ds-pipeline">
-          <div class="pipe-step"><b>1</b><span>Диалог в Instagram / магазине</span></div>
-          <div class="pipe-arrow">→</div>
-          <div class="pipe-step"><b>2</b><span>Google Form (10 сек)</span></div>
-          <div class="pipe-arrow">→</div>
-          <div class="pipe-step"><b>3</b><span>Google Sheets</span></div>
-          <div class="pipe-arrow">→</div>
-          <div class="pipe-step"><b>4</b><span>Этот дашборд</span></div>
+      <div class="forecast-grid">
+        <div class="fc-card fc-bad animate">
+          <div class="fc-tag">Пессимистичный</div>
+          <h3>−10%</h3>
+          <ul>
+            <li>Если ничего не менять</li>
+            <li>~285 запросов</li>
+            <li>~3 продажи</li>
+            <li>~$270 выручки</li>
+          </ul>
+        </div>
+        <div class="fc-card fc-mid animate" style="animation-delay:.1s">
+          <div class="fc-tag">Базовый</div>
+          <h3>×1.0</h3>
+          <ul>
+            <li>Сохранение динамики</li>
+            <li>~317 запросов</li>
+            <li>~3 продажи</li>
+            <li>~$300 выручки</li>
+          </ul>
+        </div>
+        <div class="fc-card fc-good animate" style="animation-delay:.2s">
+          <div class="fc-tag">Оптимистичный</div>
+          <h3>×3.5</h3>
+          <ul>
+            <li>С внедрением P0-действий</li>
+            <li>400+ запросов</li>
+            <li>10–12 продаж</li>
+            <li>$1,500–2,000 выручки</li>
+          </ul>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
+
+  <!-- DATA SOURCE -->
+  <div class="wrap">
+    <section style="padding:72px 0 80px">
+      <div class="ds-card">
+        <div class="ds-icon">📊</div>
+        <div class="ds-content">
+          <h3>Источник данных</h3>
+          <p>Менеджер вводит данные через Google-форму после каждого диалога с клиентом. Когда придут разбивки по дням — появится живая динамика и графики week-over-week.</p>
+          <div class="pipeline">
+            <div class="pipe-step"><div class="pipe-num">1</div><span>Диалог Instagram / магазин</span></div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step"><div class="pipe-num">2</div><span>Google Form (10 сек)</span></div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step"><div class="pipe-num">3</div><span>Google Sheets</span></div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step"><div class="pipe-num">4</div><span>Этот дашборд</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 
 </main>
 
 <footer class="footer">
   <div class="footer-inner">
     <div>
-      <div class="brand small">
-        <div class="brand-logo">N</div>
+      <div class="footer-brand">
+        <div class="mini-logo">N</div>
         <span>Neoflam Uzbekistan · Sales Intelligence</span>
       </div>
-      <p class="footer-note">Внутренний дашборд аналитики. Не для внешнего использования.</p>
+      <div class="footer-note">Внутренний дашборд аналитики. Не для внешнего использования.</div>
     </div>
     <div class="footer-meta">
-      <span>v1.0 · 10-day report</span>
-      <span>Built with care · 2026</span>
+      <div>v2.0 · 10-day report</div>
+      <div>Built with care · 2026</div>
     </div>
   </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="js/app.js"></script>
+<script>
+// ---- Animated counters ----
+function animateCounter(el, target, duration) {
+  duration = duration || 1600;
+  var endVal = parseInt(target.toString().replace(/[^\d]/g, ''));
+  var startTime = performance.now();
+  function tick(now) {
+    var elapsed = now - startTime;
+    var progress = Math.min(elapsed / duration, 1);
+    var eased = 1 - Math.pow(1 - progress, 3);
+    var current = Math.round(endVal * eased);
+    el.textContent = current.toLocaleString('en-US');
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
 
+var counterObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      var el = entry.target;
+      animateCounter(el, el.dataset.counter);
+      counterObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.4 });
+
+document.querySelectorAll('[data-counter]').forEach(function(el) {
+  counterObserver.observe(el);
+});
+
+// ---- Smooth scroll ----
+document.querySelectorAll('.topnav a').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    var href = link.getAttribute('href');
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      var target = document.querySelector(href);
+      if (target) {
+        var top = target.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    }
+  });
+});
+
+// ---- Active nav ----
+var sections = document.querySelectorAll('section[id]');
+var navLinks = document.querySelectorAll('.topnav a');
+window.addEventListener('scroll', function() {
+  var scrollPos = window.scrollY + 120;
+  sections.forEach(function(section) {
+    var top = section.offsetTop;
+    var height = section.offsetHeight;
+    var id = section.getAttribute('id');
+    if (scrollPos >= top && scrollPos < top + height) {
+      navLinks.forEach(function(l) { l.classList.remove('active'); });
+      var active = document.querySelector('.topnav a[href="#' + id + '"]');
+      if (active) active.classList.add('active');
+    }
+  });
+});
+
+// ---- Chart ----
+window.addEventListener('DOMContentLoaded', function() {
+  var ctx = document.getElementById('productsChart');
+  if (!ctx || typeof Chart === 'undefined') return;
+
+  Chart.defaults.font.family = "'DM Sans', system-ui, sans-serif";
+  Chart.defaults.color = '#8BA3BD';
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Fika4', 'Bebe', 'Fika6', 'Vakuum', 'Blinnitsa', 'Bein', 'Qozon', 'Sherbet'],
+      datasets: [
+        {
+          label: 'Запросы',
+          data: [151, 88, 23, 23, 15, 8, 8, 1],
+          backgroundColor: 'rgba(0,201,167,0.75)',
+          borderRadius: 6,
+          borderSkipped: false,
+          barThickness: 22
+        },
+        {
+          label: 'Продажи',
+          data: [2, 0, 1, 0, 0, 0, 0, 0],
+          backgroundColor: 'rgba(245,166,35,0.85)',
+          borderRadius: 6,
+          borderSkipped: false,
+          barThickness: 22
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#1C2631',
+          borderColor: '#2E3D50',
+          borderWidth: 1,
+          titleFont: { size: 13, weight: '600' },
+          bodyFont: { size: 13 },
+          padding: 12,
+          cornerRadius: 10,
+          displayColors: true,
+          boxPadding: 4
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 12, weight: '500' }, color: '#8BA3BD' }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
+          ticks: { font: { size: 11 }, padding: 8, color: '#8BA3BD' }
+        }
+      },
+      animation: { duration: 1200, easing: 'easeOutQuart' }
+    }
+  });
+});
+
+// ---- Funnel scroll animation ----
+var funnelObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+      funnelObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.f-step').forEach(function(step, i) {
+  step.style.opacity = '0';
+  step.style.transform = 'translateY(20px)';
+  step.style.transition = 'all .6s ease ' + (i * 0.15) + 's';
+  funnelObserver.observe(step);
+});
+</script>
 </body>
 </html>
