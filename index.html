@@ -1,198 +1,222 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neoflam Uzbekistan Sales Intelligence</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90%'%3EN%3C/text%3E%3C/svg%3E">
-    <style>
-        :root {
-            --bg: #FFFFFF; /* Белый фон под Neoflam */
-            --bg2: #F8F9FA;
-            --bg3: #F1F3F4;
-            --card: #FFFFFF;
-            --card2: #FAFBFC;
-            --border: #E5E7EB;
-            --border2: #D1D5DB;
-            --text: #111827;
-            --text2: #6B7280;
-            --text3: #9CA3AF;
-            --red: #CF152D; /* Основной красный Neoflam */
-            --red-d: #A81225;
-            --red-soft: rgba(207, 21, 45, 0.12);
-            --amber: #F59E0B;
-            --amber-soft: rgba(245, 158, 11, 0.12);
-            --teal: #10B981; /* Зелёный для успеха */
-            --teal-soft: rgba(16, 185, 129, 0.12);
-            --f-head: "DM Serif Display", Georgia, serif;
-            --f-body: "DM Sans", system-ui, sans-serif;
-            --r: 10px;
-            --r-lg: 16px;
-        }
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { font-family: var(--f-body); font-size: 15px; line-height: 1.6; color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; }
-        a { color: inherit; text-decoration: none; }
-        body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23n)' opacity='0.03'%3E%3C/rect%3E%3C/svg%3E"); pointer-events: none; z-index: 0; opacity: 0.05; }
-        /* TOPBAR */
-        .topbar { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(24px); border-bottom: 1px solid var(--border); }
-        .topbar-inner { max-width: 1300px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 64px; }
-        .brand { display: flex; align-items: center; gap: 14px; }
-        .brand-logo { width: 38px; height: 38px; border-radius: var(--r); background: linear-gradient(135deg, var(--red) 0%, var(--red-d) 100%); display: grid; place-items: center; font-family: var(--f-head); font-size: 18px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.5px; box-shadow: 0 0 20px rgba(207,21,45,0.3); }
-        .brand-name { font-family: var(--f-head); font-size: 19px; letter-spacing: -0.3px; }
-        .brand-sub { font-size: 10.5px; color: var(--text3); letter-spacing: 0.8px; text-transform: uppercase; margin-top: 1px; }
-        .topnav { display: flex; gap: 2px; }
-        .topnav a { padding: 7px 14px; font-size: 13px; font-weight: 500; color: var(--text2); border-radius: 8px; transition: all 0.2s; }
-        .topnav a:hover { background: var(--bg3); color: var(--text); }
-        .topnav a.active { background: var(--red-soft); color: var(--red); }
-        .live-pill { display: flex; align-items: center; gap: 8px; padding: 6px 14px; border: 1px solid var(--border2); border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--text2); }
-        .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 3px rgba(207,21,45,0.2); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(207,21,45,0.4); } 50% { box-shadow: 0 0 0 6px rgba(207,21,45,0); } }
-        /* CONTAINER */
-        .wrap { max-width: 1300px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
-        /* HERO */
-        .hero { padding: 72px 0 80px; display: grid; grid-template-columns: 1.5fr 1fr; gap: 80px; align-items: center; border-bottom: 1px solid var(--border); }
-        .hero-eyebrow { font-size: 10.5px; font-weight: 600; letter-spacing: 3px; color: var(--red); text-transform: uppercase; margin-bottom: 22px; display: flex; align-items: center; gap: 10px; }
-        .hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--red); }
-        .hero h1 { font-family: var(--f-head); font-size: 58px; line-height: 1.08; letter-spacing: -1.5px; margin-bottom: 22px; }
-        .hero h1 em { font-style: italic; color: var(--red); }
-        .hero-sub { font-size: 16px; color: var(--text2); line-height: 1.65; max-width: 520px; }
-        .hero-stats { display: flex; flex-direction: column; gap: 12px; }
-        .hero-stat { background: var(--card2); border: 1px solid var(--border2); border-radius: var(--r-lg); padding: 22px 24px; position: relative; overflow: hidden; cursor: default; transition: border-color 0.25s, transform 0.25s; }
-        .hero-stat:hover { border-color: var(--red-d); transform: translateX(4px); }
-        .hero-stat::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 2px 0 0 2px; }
-        .hero-stat:nth-child(1)::before { background: var(--red); }
-        .hero-stat:nth-child(2)::before { background: var(--amber); }
-        .hero-stat:nth-child(3)::before { background: var(--teal); }
-        .hs-val { font-family: var(--f-head); font-size: 44px; letter-spacing: -1.5px; line-height: 1; }
-        .hs-label { font-size: 12.5px; color: var(--text2); margin-top: 5px; }
-        /* SECTION */
-        .section { padding: 72px 0; border-bottom: 1px solid var(--border); }
-        .section-head { margin-bottom: 40px; }
-        .section-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 3px; color: var(--red); text-transform: uppercase; margin-bottom: 12px; }
-        .section-head h2 { font-family: var(--f-head); font-size: 38px; letter-spacing: -0.8px; margin-bottom: 8px; }
-        .section-head p { color: var(--text2); font-size: 14.5px; }
-        /* KPI GRID */
-        .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-        .kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 24px; transition: all 0.25s; cursor: default; }
-        .kpi-card:hover { border-color: var(--border2); background: var(--card2); transform: translateY(-2px); }
-        .kpi-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 10px; }
-        .kpi-label { font-size: 12px; color: var(--text2); font-weight: 500; line-height: 1.4; }
-        .kpi-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; white-space: nowrap; flex-shrink: 0; }
-        .kpi-badge.down { background: var(--red-soft); color: var(--red); }
-        .kpi-badge.up { background: var(--teal-soft); color: var(--teal); }
-        .kpi-badge.warn { background: var(--amber-soft); color: var(--amber); }
-        .kpi-badge.info { background: var(--teal-soft); color: var(--teal); }
-        .kpi-val { font-family: var(--f-head); font-size: 40px; letter-spacing: -1px; line-height: 1; margin-bottom: 10px; }
-        .kpi-val .unit { font-size: 20px; color: var(--text2); }
-        .kpi-foot { font-size: 12px; color: var(--text3); }
-        .kpi-bar { height: 5px; background: var(--bg3); border-radius: 4px; overflow: hidden; margin-top: 14px; }
-        .kpi-fill { height: 100%; border-radius: 4px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); } /* Оптимизировано */
-        .kpi-fill.red { background: linear-gradient(90deg, var(--red-d), var(--red)); }
-        .kpi-fill.teal { background: linear-gradient(90deg, var(--teal), rgba(16,185,129,0.7)); }
-        .kpi-fill.amber { background: linear-gradient(90deg, #C47A15, var(--amber)); }
-        /* PRODUCTS & CHART - оптимизировано */
-        .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
-        .prod-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 20px 20px; transition: all 0.25s; cursor: default; }
-        .prod-card:hover { border-color: var(--border2); transform: translateY(-3px); }
-        .prod-card.hero-prod { grid-column: span 2; background: linear-gradient(140deg, rgba(207,21,45,0.15) 0%, rgba(207,21,45,0.05) 100%); border-color: var(--red-d); }
-        .prod-rank { font-size: 10px; color: var(--text3); letter-spacing: 1.5px; font-weight: 600; margin-bottom: 6px; }
-        .prod-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .prod-name { font-family: var(--f-head); font-size: 24px; letter-spacing: -0.3px; }
-        .hero-prod .prod-name { font-size: 30px; }
-        .prod-tag { font-size: 10.5px; padding: 3px 10px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
-        .tag-hot { background: rgba(245,158,11,0.15); color: var(--amber); }
-        .tag-alert { background: var(--red-soft); color: var(--red); }
-        .tag-ok { background: var(--teal-soft); color: var(--teal); }
-        .prod-nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
-        .pn { display: flex; flex-direction: column; gap: 2px; }
-        .pn-val { font-family: var(--f-head); font-size: 20px; letter-spacing: -0.3px; line-height: 1; }
-        .pn-lab { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
-        .prod-bar { height: 3px; background: var(--bg3); border-radius: 3px; overflow: hidden; margin-bottom: 10px; }
-        .prod-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--red-d), var(--red)); }
-        .prod-note { font-size: 12px; color: var(--text2); line-height: 1.5; }
-        .chart-box { background: var(--card); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 28px; margin-bottom: 0; }
-        .chart-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .chart-top h3 { font-family: var(--f-head); font-size: 20px; }
-        .legend { display: flex; gap: 16px; font-size: 12px; color: var(--text2); }
-        .legend span { display: flex; align-items: center; gap: 6px; }
-        .legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
-        /* Остальные секции аналогично оптимизированы (сократил для краткости, но все в коде) */
-        .funnel { /* ... аналогично, с --red вместо teal */ }
-        /* RESPONSIVE */
-        @media (max-width: 1100px) { .hero { grid-template-columns: 1fr; gap: 40px; padding: 48px 0 56px; } .hero h1 { font-size: 44px; } /* ... */ }
-        @media (max-width: 720px) { .wrap { padding: 0 18px; } .topnav { display: none; } /* ... */ }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-        .animate { animation: fadeUp 0.6s ease-out backwards; }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Neoflam UZ — Sales Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍳%3C/text%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Цветовая палитра Neoflam Premium */
+  --bg: #F9F7F2; /* Мягкий беж/песочный */
+  --bg2: #FFFFFF;
+  --bg3: #EFEBE4;
+  --card: #FFFFFF;
+  --card2: #FDFCFB;
+  --border: #E8E2D9;
+  --border2: #D8D1C5;
+  --text: #2D2926; /* Глубокий графит */
+  --text2: #6B6661;
+  --text3: #A39D97;
+  --primary: #4B635A; /* Приглушенный оливковый/зеленый */
+  --primary-d: #364841;
+  --primary-soft: rgba(75, 99, 90, 0.08);
+  --accent: #D4A373; /* Цвет дерева/песчаника */
+  --accent-soft: rgba(212, 163, 115, 0.12);
+  --red: #A64444;
+  --red-soft: rgba(166, 68, 68, 0.08);
+  --f-head: 'DM Serif Display', Georgia, serif;
+  --f-body: 'DM Sans', system-ui, sans-serif;
+  --r: 8px;
+  --r-lg: 12px;
+}
+
+html,body{font-family:var(--f-body);font-size:15px;line-height:1.6;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased; overflow-x: hidden;}
+a{color:inherit;text-decoration:none}
+
+/* Исправленный шум (менее контрастный) */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
+
+.topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.topbar-inner{max-width:1300px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-logo{width:34px;height:34px;border-radius:8px;background:var(--primary);display:grid;place-items:center;font-family:var(--f-head);font-size:16px;color:#fff;}
+.brand-name{font-family:var(--f-head);font-size:18px;}
+
+.topnav{display:flex;gap:4px}
+.topnav a{padding:6px 12px;font-size:13px;font-weight:500;color:var(--text2);border-radius:6px;transition: .2s}
+.topnav a:hover{background:var(--bg3);color:var(--text)}
+.topnav a.active{background:var(--primary-soft);color:var(--primary)}
+
+.wrap{max-width:1300px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+
+/* HERO */
+.hero{padding:60px 0;display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:center;}
+.hero h1{font-family:var(--f-head);font-size:52px;line-height:1.1;margin-bottom:20px; color: var(--primary-d);}
+.hero h1 em{font-style:italic;color:var(--accent); font-weight: 400;}
+.hero-sub{font-size:16px;color:var(--text2);max-width:480px}
+
+.hero-stats{display:grid; grid-template-columns: 1fr 1fr; gap: 15px;}
+.hero-stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px; box-shadow: 0 4px 20px rgba(0,0,0,0.02);}
+.hs-val{font-family:var(--f-head);font-size:38px; color: var(--primary);}
+.hs-label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:1px; margin-top: 4px;}
+
+/* SECTION */
+.section{padding:60px 0;border-top:1px solid var(--border)}
+.section-head{margin-bottom:32px}
+.section-head h2{font-family:var(--f-head);font-size:34px; margin-bottom:4px}
+
+/* CHART BOX - ИСПРАВЛЕНИЕ ЛАГОВ */
+.chart-container {
+  position: relative;
+  height: 350px; /* Фиксированная высота предотвращает "прыжки" Layout */
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+}
+
+/* FUNNEL */
+.funnel{display:flex;flex-direction:column;gap:8px;max-width: 600px; margin: 0 auto;}
+.f-step{width: var(--w); margin: 0 auto; min-width: 200px;}
+.f-bar{background:var(--primary); color: #fff; padding:14px 20px;border-radius:var(--r);display:flex;justify-content:space-between;align-items:center}
+.f-bar b{font-family:var(--f-head);font-size:22px;}
+.f-meta{text-align:center;font-size:11px;color:var(--text3);margin-top:4px}
+
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:20px}
+.kpi-card{background:var(--card);border:1px solid var(--border);padding:24px;border-radius:var(--r-lg);}
+.kpi-val{font-family:var(--f-head);font-size:32px; color: var(--primary);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr; text-align: center;}
+  .hero-sub{margin: 0 auto 30px;}
+  .hero-stats{max-width: 500px; margin: 0 auto;}
+  .chart-container{height: 300px;}
+}
+</style>
 </head>
 <body>
-    <!-- TOPBAR и остальной HTML аналогично оригиналу, но с обновлёнными классами/цветами -->
-    <header class="topbar">
-        <div class="topbar-inner">
-            <div class="brand">
-                <div class="brand-logo">N</div>
-                <div>
-                    <div class="brand-name">Neoflam</div>
-                    <div class="brand-sub">Uzbekistan Sales Intelligence</div>
-                </div>
-            </div>
-            <nav class="topnav">
-                <a href="#overview" class="active">Overview</a>
-                <a href="#products">Products</a>
-                <a href="#funnel">Funnel</a>
-                <a href="#insights">Insights</a>
-                <a href="#actions">Actions</a>
-            </nav>
-            <div class="live-pill"><span class="live-dot"></span><span>Live</span></div>
-        </div>
-    </header>
-    <main>
-        <!-- HERO, KPI, PRODUCTS с canvas id="productsChart" height="120" loading="lazy" -->
-        <canvas id="productsChart" height="120" loading="lazy" width="800"></canvas>
-        <!-- Остальные секции... -->
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script>
-        // Оптимизированные скрипты: анимации короче, чарт lazy
-        // animateCounter, IntersectionObserver, Chart с duration: 800, barThickness: 18
-        window.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('productsChart');
-            if (!ctx || typeof Chart === 'undefined') return;
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Fika4', 'Bebe', 'Fika6', 'Vakuum', 'Blinnitsa', 'Bein', 'Qozon', 'Sherbet'],
-                    datasets: [{
-                        data: [151, 88, 23, 23, 15, 8, 8, 1],
-                        backgroundColor: 'rgba(207,21,45,0.75)',
-                        borderRadius: 6,
-                        borderSkipped: false,
-                        barThickness: 18  // Тоньше для производительности
-                    }, {
-                        data: [2, 0, 1, 0, 0, 0, 0, 0],
-                        backgroundColor: 'rgba(245,158,11,0.85)',
-                        borderRadius: 6,
-                        borderSkipped: false,
-                        barThickness: 18
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { display: false }, ticks: { font: { size: 12, weight: 500 }, color: '#6B7280' } },
-                        y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { font: { size: 11 }, padding: 8, color: '#6B7280' } }
-                    },
-                    animation: { duration: 800, easing: 'easeOutQuart' },  // Быстрее
-                    tooltip: { /* ... */ }
-                }
-            });
-        });
-        // Остальные скрипты...
-    </script>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-logo">N</div>
+      <div class="brand-name">Neoflam UZ</div>
+    </div>
+    <nav class="topnav">
+      <a href="#overview" class="active">Обзор</a>
+      <a href="#products">Товары</a>
+      <a href="#funnel">Воронка</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h1>Эстетика приготовления — <em>в цифрах</em>.</h1>
+      <p class="hero-sub">Аналитика продаж Neoflam Uzbekistan. Отслеживаем эффективность каждого касания с клиентом.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hs-val" data-counter="317">0</div>
+        <div class="hs-label">Запросы</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hs-val" data-counter="3">0</div>
+        <div class="hs-label">Продажи</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="overview">
+    <div class="section-head">
+      <h2>Анализ спроса</h2>
+      <p>Распределение интереса покупателей по линейкам продукции</p>
+    </div>
+    <div class="chart-container">
+      <canvas id="productsChart"></canvas>
+    </div>
+  </section>
+
+  <section class="section" id="funnel">
+    <div class="section-head" style="text-align: center;">
+      <h2>Воронка конверсии</h2>
+      <p>Где мы теряем внимание клиентов</p>
+    </div>
+    <div class="funnel">
+      <div class="f-step" style="--w:100%">
+        <div class="f-bar"><span>Запросы</span><b>317</b></div>
+        <div class="f-meta">100% входящий трафик</div>
+      </div>
+      <div class="f-step" style="--w:58%">
+        <div class="f-bar" style="background: var(--accent)"><span>Узнали цену</span><b>183</b></div>
+        <div class="f-meta">58% получили консультацию</div>
+      </div>
+      <div class="f-step" style="--w:4%">
+        <div class="f-bar" style="background: var(--primary-d)"><span>Купили</span><b>3</b></div>
+        <div class="f-meta">0.95% итоговая конверсия</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+// Анимация цифр
+function animateCounter(el, target) {
+  let start = 0;
+  let end = parseInt(target);
+  let duration = 1500;
+  let startTime = null;
+
+  function step(timestamp) {
+    if (!startTime) startTime = timestamp;
+    let progress = Math.min((timestamp - startTime) / duration, 1);
+    el.innerText = Math.floor(progress * (end - start) + start);
+    if (progress < 1) window.requestAnimationFrame(step);
+  }
+  window.requestAnimationFrame(step);
+}
+
+// Инициализация графиков при загрузке (БЕЗ ЛАГОВ)
+window.onload = function() {
+  document.querySelectorAll('[data-counter]').forEach(el => animateCounter(el, el.dataset.counter));
+
+  const ctx = document.getElementById('productsChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Fika4', 'Bebe', 'Fika6', 'Vakuum', 'Blinnitsa'],
+      datasets: [{
+        label: 'Запросы',
+        data: [151, 88, 23, 23, 15],
+        backgroundColor: '#4B635A',
+        borderRadius: 4,
+        barThickness: 30
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false, // ВАЖНО: предотвращает лаги при ресайзе
+      devicePixelRatio: 2, // Ограничение четкости для экономии ресурсов
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: { beginAtZero: true, grid: { color: '#EFEBE4' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+};
+</script>
 </body>
 </html>
