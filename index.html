@@ -6,164 +6,165 @@
 <title>Neoflam UZ — Sales Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍳%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   /* Цветовая палитра Neoflam Premium */
-  --bg: #F9F7F2; /* Мягкий беж/песочный */
-  --bg2: #FFFFFF;
-  --bg3: #EFEBE4;
+  --bg: #F9F7F2; 
   --card: #FFFFFF;
-  --card2: #FDFCFB;
   --border: #E8E2D9;
-  --border2: #D8D1C5;
-  --text: #2D2926; /* Глубокий графит */
-  --text2: #6B6661;
-  --text3: #A39D97;
-  --primary: #4B635A; /* Приглушенный оливковый/зеленый */
-  --primary-d: #364841;
-  --primary-soft: rgba(75, 99, 90, 0.08);
-  --accent: #D4A373; /* Цвет дерева/песчаника */
-  --accent-soft: rgba(212, 163, 115, 0.12);
-  --red: #A64444;
-  --red-soft: rgba(166, 68, 68, 0.08);
-  --f-head: 'DM Serif Display', Georgia, serif;
-  --f-body: 'DM Sans', system-ui, sans-serif;
-  --r: 8px;
-  --r-lg: 12px;
+  --text: #2D2926;
+  --text-muted: #6B6661;
+  --neoflam-red: #E25E55; /* Фирменный красный Neoflam */
+  --neoflam-dark: #364841;
+  --accent-soft: rgba(226, 94, 85, 0.08);
+  --f-head: 'DM Serif Display', serif;
+  --f-body: 'DM Sans', sans-serif;
+  --r: 12px;
 }
+html,body{font-family:var(--f-body);color:var(--text);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
 
-html,body{font-family:var(--f-body);font-size:15px;line-height:1.6;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased; overflow-x: hidden;}
-a{color:inherit;text-decoration:none}
-
-/* Исправленный шум (менее контрастный) */
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
-
-.topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.topbar-inner{max-width:1300px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px}
-.brand{display:flex;align-items:center;gap:12px}
-.brand-logo{width:34px;height:34px;border-radius:8px;background:var(--primary);display:grid;place-items:center;font-family:var(--f-head);font-size:16px;color:#fff;}
-.brand-name{font-family:var(--f-head);font-size:18px;}
-
-.topnav{display:flex;gap:4px}
-.topnav a{padding:6px 12px;font-size:13px;font-weight:500;color:var(--text2);border-radius:6px;transition: .2s}
-.topnav a:hover{background:var(--bg3);color:var(--text)}
-.topnav a.active{background:var(--primary-soft);color:var(--primary)}
-
-.wrap{max-width:1300px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;height:70px}
+.brand-name{font-family:var(--f-head);font-size:22px;color:var(--neoflam-red)}
 
 /* HERO */
-.hero{padding:60px 0;display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:center;}
-.hero h1{font-family:var(--f-head);font-size:52px;line-height:1.1;margin-bottom:20px; color: var(--primary-d);}
-.hero h1 em{font-style:italic;color:var(--accent); font-weight: 400;}
-.hero-sub{font-size:16px;color:var(--text2);max-width:480px}
-
-.hero-stats{display:grid; grid-template-columns: 1fr 1fr; gap: 15px;}
-.hero-stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px; box-shadow: 0 4px 20px rgba(0,0,0,0.02);}
-.hs-val{font-family:var(--f-head);font-size:38px; color: var(--primary);}
-.hs-label{font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:1px; margin-top: 4px;}
+.hero{padding:60px 0;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+.hero h1{font-family:var(--f-head);font-size:52px;line-height:1.1;margin-bottom:20px}
+.hero h1 em{color:var(--neoflam-red);font-style:normal}
+.hero-stats{display:grid;gap:15px}
+.hero-stat{background:var(--card);padding:24px;border-radius:var(--r);border:1px solid var(--border);box-shadow:0 4px 15px rgba(0,0,0,0.02)}
+.hs-val{font-family:var(--f-head);font-size:42px;color:var(--neoflam-red);line-height:1}
+.hs-label{font-size:13px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:8px}
 
 /* SECTION */
-.section{padding:60px 0;border-top:1px solid var(--border)}
-.section-head{margin-bottom:32px}
-.section-head h2{font-family:var(--f-head);font-size:34px; margin-bottom:4px}
+.section{padding:80px 0;border-top:1px solid var(--border)}
+.section-head{margin-bottom:40px}
+.section-head h2{font-family:var(--f-head);font-size:36px;margin-bottom:10px}
 
-/* CHART BOX - ИСПРАВЛЕНИЕ ЛАГОВ */
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:20px}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px}
+.kpi-val{font-family:var(--f-head);font-size:36px;margin:10px 0}
+.kpi-badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase}
+.badge-red{background:#FEE2E2;color:#991B1B}
+
+/* CHART BOX - ОПТИМИЗИРОВАНО */
+.chart-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px;margin-top:30px}
 .chart-container {
   position: relative;
-  height: 350px; /* Фиксированная высота предотвращает "прыжки" Layout */
+  height: 500px; /* Фиксированная высота убирает лаги */
   width: 100%;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: 20px;
 }
 
 /* FUNNEL */
-.funnel{display:flex;flex-direction:column;gap:8px;max-width: 600px; margin: 0 auto;}
-.f-step{width: var(--w); margin: 0 auto; min-width: 200px;}
-.f-bar{background:var(--primary); color: #fff; padding:14px 20px;border-radius:var(--r);display:flex;justify-content:space-between;align-items:center}
-.f-bar b{font-family:var(--f-head);font-size:22px;}
-.f-meta{text-align:center;font-size:11px;color:var(--text3);margin-top:4px}
+.funnel{margin:40px auto;max-width:700px;display:flex;flex-direction:column;gap:10px}
+.f-step{background:var(--neoflam-red);color:#fff;padding:20px;border-radius:var(--r);display:flex;justify-content:space-between;align-items:center;width:var(--w);margin:0 auto}
+.f-step b{font-family:var(--f-head);font-size:24px}
+.f-meta{text-align:center;font-size:12px;color:var(--text-muted);margin-bottom:15px}
 
-/* KPI CARDS */
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:20px}
-.kpi-card{background:var(--card);border:1px solid var(--border);padding:24px;border-radius:var(--r-lg);}
-.kpi-val{font-family:var(--f-head);font-size:32px; color: var(--primary);}
+/* WORD CLOUD */
+.wcloud{display:flex;flex-wrap:wrap;gap:15px;justify-content:center;padding:40px;background:var(--card);border-radius:var(--r);border:1px solid var(--border)}
+.w1{font-size:48px;color:var(--neoflam-red);font-family:var(--f-head)}
+.w2{font-size:32px;color:var(--text);font-family:var(--f-head)}
+.w3{font-size:20px;color:var(--text-muted)}
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  .hero{grid-template-columns:1fr; text-align: center;}
-  .hero-sub{margin: 0 auto 30px;}
-  .hero-stats{max-width: 500px; margin: 0 auto;}
-  .chart-container{height: 300px;}
+@media(max-width:800px){
+  .hero{grid-template-columns:1fr;text-align:center}
+  .chart-container{height:400px}
 }
 </style>
 </head>
 <body>
 
 <header class="topbar">
-  <div class="topbar-inner">
-    <div class="brand">
-      <div class="brand-logo">N</div>
-      <div class="brand-name">Neoflam UZ</div>
-    </div>
-    <nav class="topnav">
-      <a href="#overview" class="active">Обзор</a>
-      <a href="#products">Товары</a>
-      <a href="#funnel">Воронка</a>
-    </nav>
+  <div class="wrap topbar-inner">
+    <div class="brand-name">NEOFLAM UZBEKISTAN</div>
+    <div style="font-size:12px;font-weight:bold;color:var(--text-muted)">SALES INTELLIGENCE v2.0</div>
   </div>
 </header>
 
 <main class="wrap">
   <section class="hero">
     <div>
-      <h1>Эстетика приготовления — <em>в цифрах</em>.</h1>
-      <p class="hero-sub">Аналитика продаж Neoflam Uzbekistan. Отслеживаем эффективность каждого касания с клиентом.</p>
+      <h1>Каждый запрос — <em>сигнал</em>.</h1>
+      <p>Аналитический контур Neoflam. Мы превращаем диалоги из Instagram в стратегию роста продаж премиальной посуды.</p>
     </div>
     <div class="hero-stats">
       <div class="hero-stat">
         <div class="hs-val" data-counter="317">0</div>
-        <div class="hs-label">Запросы</div>
+        <div class="hs-label">Всего запросов</div>
       </div>
       <div class="hero-stat">
         <div class="hs-val" data-counter="3">0</div>
-        <div class="hs-label">Продажи</div>
+        <div class="hs-label">Продажи (10 дней)</div>
       </div>
     </div>
   </section>
 
   <section class="section" id="overview">
     <div class="section-head">
-      <h2>Анализ спроса</h2>
-      <p>Распределение интереса покупателей по линейкам продукции</p>
+      <h2>01. Общий пульс</h2>
+      <p>Ключевые метрики эффективности маркетинга и продаж.</p>
     </div>
-    <div class="chart-container">
-      <canvas id="productsChart"></canvas>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-badge badge-red">Ниже нормы</div>
+        <div class="kpi-val">0.95%</div>
+        <div style="color:var(--text-muted)">Конверсия в покупку</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-badge" style="background:#E0F2FE;color:#075985">Instagram</div>
+        <div class="kpi-val">85%</div>
+        <div style="color:var(--text-muted)">Доля трафика из соцсетей</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-badge" style="background:#DCFCE7;color:#166534">Премиум</div>
+        <div class="kpi-val">$150</div>
+        <div style="color:var(--text-muted)">Средний чек сделки</div>
+      </div>
+    </div>
+
+    <div class="chart-box">
+      <h3 style="font-family:var(--f-head);margin-bottom:20px">Детальный спрос по коллекциям</h3>
+      <div class="chart-container">
+        <canvas id="productsChart"></canvas>
+      </div>
     </div>
   </section>
 
   <section class="section" id="funnel">
-    <div class="section-head" style="text-align: center;">
-      <h2>Воронка конверсии</h2>
-      <p>Где мы теряем внимание клиентов</p>
+    <div class="section-head" style="text-align:center">
+      <h2>02. Воронка продаж</h2>
+      <p>Где мы теряем клиентов: анализ 317 касаний</p>
     </div>
     <div class="funnel">
-      <div class="f-step" style="--w:100%">
-        <div class="f-bar"><span>Запросы</span><b>317</b></div>
-        <div class="f-meta">100% входящий трафик</div>
-      </div>
-      <div class="f-step" style="--w:58%">
-        <div class="f-bar" style="background: var(--accent)"><span>Узнали цену</span><b>183</b></div>
-        <div class="f-meta">58% получили консультацию</div>
-      </div>
-      <div class="f-step" style="--w:4%">
-        <div class="f-bar" style="background: var(--primary-d)"><span>Купили</span><b>3</b></div>
-        <div class="f-meta">0.95% итоговая конверсия</div>
-      </div>
+      <div class="f-step" style="--w:100%"><span>Запросы</span><b>317</b></div>
+      <div class="f-meta">−42% уходят после озвучивания цены</div>
+      <div class="f-step" style="--w:58%;background:#364841"><span>Узнали цену</span><b>183</b></div>
+      <div class="f-meta">Только 7.5% переходят в стадию «догрев»</div>
+      <div class="f-step" style="--w:10%;background:var(--text)"><span>Купили</span><b>3</b></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>03. Голос клиента</h2>
+      <p>Что чаще всего звучит в переписках (Word Cloud)</p>
+    </div>
+    <div class="wcloud">
+      <span class="w1">ДОРОГО</span>
+      <span class="w2">Цена</span>
+      <span class="w2">Рассрочка</span>
+      <span class="w1">FIKA</span>
+      <span class="w3">Подумаю</span>
+      <span class="w2">Качество</span>
+      <span class="w3">Доставка</span>
+      <span class="w2">BEBE</span>
+      <span class="w3">Оригинал</span>
     </div>
   </section>
 </main>
@@ -174,9 +175,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 function animateCounter(el, target) {
   let start = 0;
   let end = parseInt(target);
-  let duration = 1500;
+  let duration = 2000;
   let startTime = null;
-
   function step(timestamp) {
     if (!startTime) startTime = timestamp;
     let progress = Math.min((timestamp - startTime) / duration, 1);
@@ -186,7 +186,6 @@ function animateCounter(el, target) {
   window.requestAnimationFrame(step);
 }
 
-// Инициализация графиков при загрузке (БЕЗ ЛАГОВ)
 window.onload = function() {
   document.querySelectorAll('[data-counter]').forEach(el => animateCounter(el, el.dataset.counter));
 
@@ -194,25 +193,25 @@ window.onload = function() {
   new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Fika4', 'Bebe', 'Fika6', 'Vakuum', 'Blinnitsa'],
+      labels: ['Fika 4', 'Bebe', 'Fika 6', 'Vakuum', 'Blinnitsa', 'Better Finger', 'Blossom', 'Sherbet', 'Noblesse', 'Retro', 'Midas', 'Ami'],
       datasets: [{
-        label: 'Запросы',
-        data: [151, 88, 23, 23, 15],
-        backgroundColor: '#4B635A',
-        borderRadius: 4,
-        barThickness: 30
+        label: 'Кол-во запросов',
+        data: [151, 88, 23, 23, 15, 8, 4, 2, 1, 1, 1, 0],
+        backgroundColor: '#E25E55',
+        borderRadius: 5,
+        barThickness: 25
       }]
     },
     options: {
+      indexAxis: 'y', // Горизонтальный чарт работает быстрее и не лагает
       responsive: true,
-      maintainAspectRatio: false, // ВАЖНО: предотвращает лаги при ресайзе
-      devicePixelRatio: 2, // Ограничение четкости для экономии ресурсов
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: false }
       },
       scales: {
-        y: { beginAtZero: true, grid: { color: '#EFEBE4' } },
-        x: { grid: { display: false } }
+        x: { grid: { display: false }, ticks: { color: '#6B6661' } },
+        y: { grid: { color: '#E8E2D9' }, ticks: { color: '#2D2926', font: { weight: 'bold' } } }
       }
     }
   });
